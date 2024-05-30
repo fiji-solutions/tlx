@@ -7,7 +7,9 @@ from granularity_enum import Granularity
 
 
 def get_tlx_data(tlxCoin: TlxCoins, granularity: Granularity, granularityUnit: int, fromDate: str):
-    return requests.get("https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(tlxCoin.value, granularityUnit, granularity.value, fromDate)).json()
+    url = "https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(tlxCoin.value, granularityUnit, granularity.value, fromDate)
+    print(url)
+    return requests.get(url).json()
 
 
 def get_data_df(data, initial_investment):
