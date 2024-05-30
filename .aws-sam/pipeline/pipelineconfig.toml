@@ -1,0 +1,18 @@
+version = 0.1
+[default.pipeline_bootstrap.parameters]
+pipeline_user = "arn:aws:iam::276670305248:user/aws-sam-cli-managed-tlx-staging-pipeli-PipelineUser-2MtnHxSLXjKY"
+permissions_provider = "AWS IAM"
+
+[tlx-staging.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::276670305248:role/aws-sam-cli-managed-tlx-stagi-PipelineExecutionRole-n0eOhOn7RlVj"
+cloudformation_execution_role = "arn:aws:iam::276670305248:role/aws-sam-cli-managed-tlx-s-CloudFormationExecutionRo-HcBfxcypuPfo"
+artifacts_bucket = "aws-sam-cli-managed-tlx-staging-pi-artifactsbucket-xtiz20hru4d7"
+image_repository = ""
+region = "us-east-1"
+
+[tlx-production.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::276670305248:role/aws-sam-cli-managed-tlx-produ-PipelineExecutionRole-eP4EIeZpK4Vk"
+cloudformation_execution_role = "arn:aws:iam::276670305248:role/aws-sam-cli-managed-tlx-p-CloudFormationExecutionRo-CJwyS0tPDrMI"
+artifacts_bucket = "aws-sam-cli-managed-tlx-production-artifactsbucket-ipwziu0rzn1x"
+image_repository = ""
+region = "us-east-1"
