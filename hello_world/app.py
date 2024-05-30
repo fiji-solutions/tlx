@@ -88,7 +88,7 @@ def get_omega_ratio(df, threshold=0):
 
 
 def lambda_handler(event, context):
-    data = get_tlx_data(event["coin"], event["granularity"], event["granularityUnit"], event["fromDate"])
+    data = get_tlx_data(event["queryStringParameters"]["coin"], event["queryStringParameters"]["granularity"], event["queryStringParameters"]["granularityUnit"], event["queryStringParameters"]["fromDate"])
     df = get_data_df(data)
 
     return {
