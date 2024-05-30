@@ -33,7 +33,7 @@ class Granularity(Enum):
 
 
 def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate: str):
-    url = "https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(tlxCoin.value, granularityUnit, granularity.value, fromDate)
+    url = "https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(TlxCoins[tlxCoin].value, granularityUnit, Granularity[granularity].value, fromDate)
     print(url)
     return requests.get(url).json()
 
