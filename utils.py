@@ -10,9 +10,13 @@ def get_tlx_data(tlxCoin: TlxCoins, granularity: Granularity, granularityUnit: i
     return requests.get("https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(tlxCoin.value, granularityUnit, granularity.value, fromDate)).json()
 
 
-def get_data_df(data):
+def get_data_df(data, initial_investment):
     df = pd.DataFrame(data)
     df['returns'] = df['price'].pct_change()
+    df['cumulative-returns'] = (1 + df['returns']).cumprod()
+    df['investment-value'] = initial_investment * df['cumulative-returns']
+    df['investment-value'].iloc[0] = initial_investment
+
     df['indexed'] = df['price'] / df['price'].iloc[0] * 100
     df['timestamp'] = pd.to_datetime(df['timestamp'])
     df.set_index('timestamp', inplace=True)
