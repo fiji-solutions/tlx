@@ -103,6 +103,7 @@ def lambda_handler(event, context):
 
 
     df.reset_index(inplace=True)
+    df['timestamp'] = df['timestamp'].astype(str)
     df = df.replace({np.nan: None})
 
     return {
