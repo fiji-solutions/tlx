@@ -32,8 +32,8 @@ class Granularity(Enum):
     DAYS = "days"
 
 
-def get_tlx_data(tlxCoin: TlxCoins, granularity: Granularity, granularityUnit: int, fromDate: str):
-    return requests.get("https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(tlxCoin.value, granularityUnit, granularity.value, fromDate)).json()
+def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate: str):
+    return requests.get("https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(TlxCoins[tlxCoin].value, granularityUnit, Granularity[granularity].value, fromDate)).json()
 
 
 def get_data_df(data):
