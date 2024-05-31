@@ -117,9 +117,9 @@ def lambda_handler(event, context):
         },
         "body": json.dumps({
             "data": df.to_dict(orient='records'),
-            "volatility": volatility if not np.isnan(volatility) else None,
-            "sharpe_ratio": sharpe_ratio if not np.isnan(sharpe_ratio) else None,
-            "sortino_ratio": sortino_ratio if not np.isnan(sortino_ratio) else None,
-            "omega_ratio": omega_ratio if not np.isnan(omega_ratio) else None
+            "volatility": volatility if not np.isnan(volatility) and not np.isinf(volatility) else None,
+            "sharpe_ratio": sharpe_ratio if not np.isnan(sharpe_ratio) and not np.isinf(sharpe_ratio) else None,
+            "sortino_ratio": sortino_ratio if not np.isnan(sortino_ratio) and not np.isinf(sortino_ratio) else None,
+            "omega_ratio": omega_ratio if not np.isnan(omega_ratio) and not np.isinf(omega_ratio) else None
         }),
     }
