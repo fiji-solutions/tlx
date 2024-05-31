@@ -94,12 +94,12 @@ def get_omega_ratio(df, threshold=0):
 
 def lambda_handler(event, context):
     data = get_tlx_data(event["queryStringParameters"]["coin"], event["queryStringParameters"]["granularity"], event["queryStringParameters"]["granularityUnit"], event["queryStringParameters"]["fromDate"])
-    df = get_data_df(data, int(event["queryStringParameters"]["initial_investment"]))
+    df = get_data_df(data, int(event["queryStringParameters"]["initialInvestment"]))
 
 
     volatility = get_volatility(df)
-    sharpe_ratio = get_sharpe_ratio(df)
-    sortino_ratio = get_sortino_ratio(df)
+    sharpe_ratio = get_sharpe_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
+    sortino_ratio = get_sortino_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
     omega_ratio = get_omega_ratio(df)
 
 
