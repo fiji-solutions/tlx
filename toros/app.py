@@ -8,7 +8,15 @@ import requests
 
 
 class TorosCoins(Enum):
-    ETH = "0xf715724abba480d4d45f4cb52bef5ce5e3513ccc"
+    BTC3XPOL = "0xdb88ab5b485b38edbeef866314f9e49d095bce39"
+    BTC2XOPT = "0x32ad28356ef70adc3ec051d8aacdeeaa10135296"
+    BTC3XOPT = "0xb03818de4992388260b62259361778cf98485dfe"
+    BTC3XARB = "0xad38255febd566809ae387d5be66ecd287947cb9"
+
+    ETH3XPOL = "0x460b60565cb73845d56564384ab84bf84c13e47d"
+    ETH2XOPT = "0x9573c7b691cdcebbfa9d655181f291799dfb7cf5"
+    ETH3XOPT = "0x32b1d1bfd4b3b0cb9ff2dcd9dac757aa64d4cb69"
+    ETH3XARB = "0xf715724abba480d4d45f4cb52bef5ce5e3513ccc"
 
 
 class Intervals(Enum):
