@@ -41,6 +41,7 @@ Resources:
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: python3.9
+      Timeout: 120
       Architectures:
         - x86_64
       Events:
@@ -57,6 +58,7 @@ Resources:
       CodeUri: tlx_export/
       Handler: app.lambda_handler
       Runtime: python3.9
+      Timeout: 120
       Architectures:
         - x86_64
       Events:
@@ -73,6 +75,7 @@ Resources:
       CodeUri: toros/
       Handler: app.lambda_handler
       Runtime: python3.9
+      Timeout: 120
       Architectures:
         - x86_64
       Events:
@@ -89,6 +92,7 @@ Resources:
       CodeUri: toros_export/
       Handler: app.lambda_handler
       Runtime: python3.9
+      Timeout: 120
       Architectures:
         - x86_64
       Events:
