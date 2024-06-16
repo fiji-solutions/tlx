@@ -16,6 +16,9 @@ class TorosCoins(Enum):
     ETH3XOPT = "0x32b1d1bfd4b3b0cb9ff2dcd9dac757aa64d4cb69"
     ETH3XARB = "0xf715724abba480d4d45f4cb52bef5ce5e3513ccc"
 
+    SOL2XOPT = "0x7d3c9c6566375d7ad6e89169ca5c01b5edc15364"
+    SOL3XOPT = "0xcc7d6ed524760539311ed0cdb41d0852b4eb77eb"
+
 
 class Intervals(Enum):
     h = "1h"
