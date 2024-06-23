@@ -42,7 +42,6 @@ def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate:
 
     date_to_threshold = datetime.strptime(toDate, "%Y-%m-%d")
 
-    print(response)
     filtered_data = [
         entry for entry in response
         if datetime.fromtimestamp(int(str(int(datetime.fromisoformat(entry["timestamp"].replace("Z", "+00:00")).timestamp() * 1000))) / 1000) <= date_to_threshold
@@ -125,7 +124,6 @@ def lambda_handler(event, context):
     df = get_data_df(data, int(event["queryStringParameters"]["initialInvestment"]))
 
 
-    print(df)
     volatility = get_volatility(df)
     sharpe_ratio = get_sharpe_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
     sortino_ratio = get_sortino_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
