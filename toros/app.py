@@ -29,7 +29,7 @@ class Intervals(Enum):
     w = "1w"
 
 
-def get_toros_data(torosCoin: str, interval: int, fromDate: str):
+def get_toros_data(torosCoin: str, interval: int, fromDate: str, toDate: str):
     url = "https://api-v2.dhedge.org/graphql"
     data = {
       "query": "query GetTokenPriceCandles($address: String!, $period: String!, $interval: String) {\n  tokenPriceCandles(address: $address, period: $period, interval: $interval) {\n    timestamp\n    open\n    close\n    max\n    min\n  }\n}\n",
@@ -42,11 +42,12 @@ def get_toros_data(torosCoin: str, interval: int, fromDate: str):
     }
     response = requests.post(url, json=data).json()
 
-    date_threshold = datetime.strptime(fromDate, "%Y-%m-%d")
+    date_from_threshold = datetime.strptime(fromDate, "%Y-%m-%d")
+    date_to_threshold = datetime.strptime(toDate, "%Y-%m-%d")
 
     filtered_candles = [
         candle for candle in response["data"]["tokenPriceCandles"]
-        if datetime.fromtimestamp(int(candle["timestamp"]) / 1000) >= date_threshold
+        if date_from_threshold <= datetime.fromtimestamp(int(candle["timestamp"]) / 1000) <= date_to_threshold
     ]
 
     response["data"]["tokenPriceCandles"] = filtered_candles
@@ -115,7 +116,7 @@ def get_omega_ratio(df, threshold=0):
 
 
 def lambda_handler(event, context):
-    data = get_toros_data(event["queryStringParameters"]["coin"], event["queryStringParameters"]["interval"], event["queryStringParameters"]["fromDate"])
+    data = get_toros_data(event["queryStringParameters"]["coin"], event["queryStringParameters"]["interval"], event["queryStringParameters"]["fromDate"], event["queryStringParameters"]["toDate"])
     df = get_data_df(data, int(event["queryStringParameters"]["initialInvestment"]))
 
 

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from enum import Enum
 
 import numpy as np
@@ -35,9 +36,18 @@ class Granularity(Enum):
     DAYS = "days"
 
 
-def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate: str):
+def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate: str, toDate: str):
     url = "https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(TlxCoins[tlxCoin].value, granularityUnit, Granularity[granularity].value, fromDate)
-    return requests.get(url).json()
+    response = requests.get(url).json()
+
+    date_to_threshold = datetime.strptime(toDate, "%Y-%m-%d")
+
+    filtered_data = [
+        entry for entry in response
+        if datetime.fromtimestamp(int(entry["timestamp"])) <= date_to_threshold
+    ]
+
+    return filtered_data
 
 
 def get_data_df(data, initial_investment):
@@ -48,7 +58,7 @@ def get_data_df(data, initial_investment):
     df['investment-value'].iloc[0] = initial_investment
 
     df['indexed'] = df['price'] / df['price'].iloc[0] * 100
-    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
     df.set_index('timestamp', inplace=True)
     return df
 
@@ -96,7 +106,13 @@ def get_omega_ratio(df, threshold=0):
 
 
 def lambda_handler(event, context):
-    data = get_tlx_data(event["queryStringParameters"]["coin"], event["queryStringParameters"]["granularity"], event["queryStringParameters"]["granularityUnit"], event["queryStringParameters"]["fromDate"])
+    data = get_tlx_data(
+        event["queryStringParameters"]["coin"],
+        event["queryStringParameters"]["granularity"],
+        event["queryStringParameters"]["granularityUnit"],
+        event["queryStringParameters"]["fromDate"],
+        event["queryStringParameters"]["toDate"]
+    )
     df = get_data_df(data, int(event["queryStringParameters"]["initialInvestment"]))
 
 

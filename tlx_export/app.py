@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 
 import pandas as pd
 import requests
@@ -33,13 +34,28 @@ class Granularity(Enum):
     DAYS = "days"
 
 
-def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate: str):
+def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate: str, toDate: str):
     url = "https://api.tlx.fi/functions/v1/prices/{0}?granularity={1}{2}&from={3}".format(TlxCoins[tlxCoin].value, granularityUnit, Granularity[granularity].value, fromDate)
-    return requests.get(url).json()
+    response = requests.get(url).json()
+
+    date_to_threshold = datetime.strptime(toDate, "%Y-%m-%d")
+
+    filtered_data = [
+        entry for entry in response
+        if datetime.fromtimestamp(int(entry["timestamp"])) <= date_to_threshold
+    ]
+
+    return filtered_data
 
 
 def lambda_handler(event, context):
-    data = get_tlx_data(event["queryStringParameters"]["coin"], event["queryStringParameters"]["granularity"], event["queryStringParameters"]["granularityUnit"], event["queryStringParameters"]["fromDate"])
+    data = get_tlx_data(
+        event["queryStringParameters"]["coin"],
+        event["queryStringParameters"]["granularity"],
+        event["queryStringParameters"]["granularityUnit"],
+        event["queryStringParameters"]["fromDate"],
+        event["queryStringParameters"]["toDate"]
+    )
     df = pd.DataFrame(data)
 
     # Convert DataFrame to CSV without a header row
