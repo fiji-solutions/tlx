@@ -91,18 +91,18 @@ def get_sortino_ratio(df, risk_free_rate=0):
 
 
 def get_omega_ratio(df, threshold=0):
-    returns = df['returns']
+    returns = df['returns'].dropna()
     # Calculate the cumulative distribution function (CDF)
     sorted_returns = np.sort(returns)
     cdf = np.arange(1, len(sorted_returns) + 1) / len(sorted_returns)
 
     # Gains above the threshold
     gains = sorted_returns[sorted_returns > threshold] - threshold
-    prob_gains = 1 - cdf[sorted_returns > threshold]
+    prob_gains = 1 - cdf[np.searchsorted(sorted_returns, sorted_returns[sorted_returns > threshold]) - 1]
 
     # Losses below the threshold
     losses = threshold - sorted_returns[sorted_returns <= threshold]
-    prob_losses = cdf[sorted_returns <= threshold]
+    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns[sorted_returns <= threshold]) - 1]
 
     # Sum of probability-weighted gains
     weighted_gains = np.sum(gains * prob_gains)
