@@ -105,6 +105,15 @@ def get_omega_ratio(df, threshold=0):
     return omega
 
 
+def get_simple_omega_ratio(df, threshold=0):
+    returns = df['returns'].dropna()
+    gains = returns[returns > threshold].sum() - threshold * len(returns[returns > threshold])
+    losses = abs(returns[returns <= threshold].sum() - threshold * len(returns[returns <= threshold]))
+    omega = gains / losses if losses != 0 else np.inf
+    return omega
+
+
+
 def lambda_handler(event, context):
     data = get_tlx_data(
         event["queryStringParameters"]["coin"],
@@ -121,6 +130,7 @@ def lambda_handler(event, context):
     sharpe_ratio = get_sharpe_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
     sortino_ratio = get_sortino_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
     omega_ratio = get_omega_ratio(df)
+    simple_omega_ratio = get_simple_omega_ratio(df)
 
 
     df.reset_index(inplace=True)
@@ -140,6 +150,7 @@ def lambda_handler(event, context):
             "volatility": volatility if not np.isnan(volatility) and not np.isinf(volatility) else None,
             "sharpe_ratio": sharpe_ratio if not np.isnan(sharpe_ratio) and not np.isinf(sharpe_ratio) else None,
             "sortino_ratio": sortino_ratio if not np.isnan(sortino_ratio) and not np.isinf(sortino_ratio) else None,
-            "omega_ratio": omega_ratio if not np.isnan(omega_ratio) and not np.isinf(omega_ratio) else None
+            "omega_ratio": omega_ratio if not np.isnan(omega_ratio) and not np.isinf(omega_ratio) else None,
+            "simple_omega_ratio": simple_omega_ratio if not np.isnan(simple_omega_ratio) and not np.isinf(simple_omega_ratio) else None
         }),
     }
