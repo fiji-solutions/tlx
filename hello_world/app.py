@@ -42,9 +42,10 @@ def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate:
 
     date_to_threshold = datetime.strptime(toDate, "%Y-%m-%d")
 
+    print(response)
     filtered_data = [
         entry for entry in response
-        if datetime.fromtimestamp(int(entry["timestamp"])) <= date_to_threshold
+        if datetime.fromtimestamp(int(str(int(datetime.fromisoformat(entry["timestamp"].replace("Z", "+00:00")).timestamp() * 1000))) / 1000) <= date_to_threshold
     ]
 
     return filtered_data
@@ -58,7 +59,7 @@ def get_data_df(data, initial_investment):
     df['investment-value'].iloc[0] = initial_investment
 
     df['indexed'] = df['price'] / df['price'].iloc[0] * 100
-    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
     df.set_index('timestamp', inplace=True)
     return df
 

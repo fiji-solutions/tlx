@@ -42,7 +42,7 @@ def get_tlx_data(tlxCoin: str, granularity: str, granularityUnit: int, fromDate:
 
     filtered_data = [
         entry for entry in response
-        if datetime.fromtimestamp(int(entry["timestamp"])) <= date_to_threshold
+        if datetime.fromtimestamp(int(str(int(datetime.fromisoformat(entry["timestamp"].replace("Z", "+00:00")).timestamp() * 1000))) / 1000) <= date_to_threshold
     ]
 
     return filtered_data
