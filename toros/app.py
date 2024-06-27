@@ -21,6 +21,10 @@ class TorosCoins(Enum):
     SOL2XOPT = "0x7d3c9c6566375d7ad6e89169ca5c01b5edc15364"
     SOL3XOPT = "0xcc7d6ed524760539311ed0cdb41d0852b4eb77eb"
 
+    STETH2X = "0xa672e882acbb96486393d43e0efdab5ebebddc1d"
+    STETH3X = "0x15e2f06138aed58ca2a6afb5a1333bbc5f728f80"
+    STETH4X = "0xba5f6a0d2ac21a3fec7a6c40facd23407aa84663"
+
 
 class Intervals(Enum):
     h = "1h"
