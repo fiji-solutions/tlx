@@ -30,14 +30,12 @@ def get_volatility(df):
 
 def get_sharpe_ratio(df, risk_free_rate=0):
     mean_return = df['returns'].mean()
-
     return (mean_return - risk_free_rate) / get_volatility(df)
 
 
 def get_sortino_ratio(df, risk_free_rate=0):
     downside_volatility = df[df['returns'] < 0]['returns'].std()
     mean_return = df['returns'].mean()
-
     return (mean_return - risk_free_rate) / downside_volatility
 
 
@@ -52,7 +50,7 @@ def get_omega_ratio(df, threshold=0):
 
     # Losses below the threshold
     losses = threshold - sorted_returns[sorted_returns <= threshold]
-    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns[sorted_returns <= threshold]) - 1]
+    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns <= threshold) - 1]
 
     # Sum of probability-weighted gains
     weighted_gains = np.sum(gains * prob_gains)
@@ -112,8 +110,8 @@ def lambda_handler(event, context):
         df = get_data_df(items, initial_investment)
 
         volatility = get_volatility(df)
-        sharpe_ratio = get_sharpe_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
-        sortino_ratio = get_sortino_ratio(df, int(event["queryStringParameters"]["riskFreeRate"]) / 100)
+        sharpe_ratio = get_sharpe_ratio(df, risk_free_rate / 100)
+        sortino_ratio = get_sortino_ratio(df, risk_free_rate / 100)
         omega_ratio = get_omega_ratio(df)
         simple_omega_ratio = get_simple_omega_ratio(df)
 
@@ -122,14 +120,8 @@ def lambda_handler(event, context):
         df = df.replace({np.nan: None})
 
         return {
-            "statusCode": 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "*",
-                "Access-Control-Allow-Origin": "*",
-            },
-            "body": json.dumps({
+            'statusCode': 200,
+            'body': json.dumps({
                 "data": df.to_dict(orient='records'),
                 "volatility": volatility if not np.isnan(volatility) and not np.isinf(volatility) else None,
                 "sharpe_ratio": sharpe_ratio if not np.isnan(sharpe_ratio) and not np.isinf(sharpe_ratio) else None,
@@ -137,6 +129,12 @@ def lambda_handler(event, context):
                 "omega_ratio": omega_ratio if not np.isnan(omega_ratio) and not np.isinf(omega_ratio) else None,
                 "simple_omega_ratio": simple_omega_ratio if not np.isnan(simple_omega_ratio) and not np.isinf(simple_omega_ratio) else None
             }),
+            'headers': {
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Origin": "*",
+            },
         }
 
     except ClientError as e:
