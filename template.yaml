@@ -10,6 +10,9 @@ Globals:
     Runtime: python3.9
     Timeout: 120
     MemorySize: 128
+    Environment:
+      Variables:
+        table: !Sub ${demoDynamoDBTable}
   Api:
     Cors:
       AllowMethods: "'*'"
@@ -34,6 +37,21 @@ Resources:
               Access-Control-Allow-Methods: "'*'"
               Access-Control-Allow-Origin: "'*'"
               Access-Control-Allow-Headers: "'*'"
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: "PAY_PER_REQUEST"
+      AttributeDefinitions:
+        - AttributeName: CoinName
+          AttributeType: S
+        - AttributeName: Timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: CoinName
+          KeyType: HASH
+        - AttributeName: Timestamp
+          KeyType: RANGE
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function
@@ -102,6 +120,19 @@ Resources:
             RestApiId: !Ref HelloWorldApi
             Path: /toros-export
             Method: get
+
+  SolIndexFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: solindex_cron/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 120
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
 
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
