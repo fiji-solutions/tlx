@@ -8,17 +8,17 @@ from decimal import Decimal
 
 
 def get_data_df(data, initial_investment):
+    # Convert Decimal to float
     for item in data:
-        item['price'] = float(item['Price'])
-        item.pop('Price')
+        item['Price'] = float(item['Price'])
 
     df = pd.DataFrame(data)
-    df['returns'] = df['price'].pct_change()
+    df['returns'] = df['Price'].pct_change()
     df['cumulative-returns'] = (1 + df['returns']).cumprod()
     df['investment-value'] = initial_investment * df['cumulative-returns']
     df['investment-value'].iloc[0] = initial_investment
 
-    df['indexed'] = df['price'] / df['price'].iloc[0] * 100
+    df['indexed'] = df['Price'] / df['Price'].iloc[0] * 100
     df['timestamp'] = pd.to_datetime(df['Timestamp'])
     df.set_index('timestamp', inplace=True)
     return df
@@ -46,15 +46,21 @@ def get_omega_ratio(df, threshold=0):
     sorted_returns = np.sort(returns)
     cdf = np.arange(1, len(sorted_returns) + 1) / len(sorted_returns)
 
+    # Gains above the threshold
     gains = sorted_returns[sorted_returns > threshold] - threshold
     prob_gains = 1 - cdf[np.searchsorted(sorted_returns, sorted_returns[sorted_returns > threshold]) - 1]
 
+    # Losses below the threshold
     losses = threshold - sorted_returns[sorted_returns <= threshold]
-    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns <= threshold) - 1]
+    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns[sorted_returns <= threshold]) - 1]
 
+    # Sum of probability-weighted gains
     weighted_gains = np.sum(gains * prob_gains)
+
+    # Sum of probability-weighted losses
     weighted_losses = np.sum(losses * prob_losses)
 
+    # Omega Ratio
     omega = weighted_gains / weighted_losses if weighted_losses != 0 else np.inf
     return omega
 
@@ -114,10 +120,6 @@ def lambda_handler(event, context):
         df.reset_index(inplace=True)
         df['timestamp'] = df['timestamp'].astype(str)
         df = df.replace({np.nan: None})
-
-        for item in df.to_dict(orient='records'):
-            item.pop('Timestamp', None)
-            item.pop('CoinName', None)
 
         return {
             "statusCode": 200,
