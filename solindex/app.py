@@ -4,19 +4,20 @@ from botocore.exceptions import ClientError
 import os
 import numpy as np
 import pandas as pd
+from decimal import Decimal
 
 
-def aggregate_data(df, granularity_unit, granularity):
-    if granularity == 'HOURS':
-        df = df.resample(f'{granularity_unit}H').mean()
-    elif granularity == 'DAYS':
-        df = df.resample(f'{granularity_unit}D').mean()
-    elif granularity == 'WEEKS':
-        df = df.resample(f'{granularity_unit}W').mean()
+def aggregate_data(df, granularity, granularity_unit):
+    if granularity_unit == 'HOURS':
+        df = df.resample(f'{granularity}H').mean()
+    elif granularity_unit == 'DAYS':
+        df = df.resample(f'{granularity}D').mean()
+    elif granularity_unit == 'WEEKS':
+        df = df.resample(f'{granularity}W').mean()
     return df
 
 
-def get_data_df(data, initial_investment, granularity_unit, granularity):
+def get_data_df(data, initial_investment, granularity, granularity_unit):
     for item in data:
         item['price'] = float(item['Price'])
         item.pop('Price')
@@ -24,7 +25,7 @@ def get_data_df(data, initial_investment, granularity_unit, granularity):
     df = pd.DataFrame(data)
     df['timestamp'] = pd.to_datetime(df['Timestamp'])
     df.set_index('timestamp', inplace=True)
-    df = aggregate_data(df, granularity_unit, granularity)
+    df = aggregate_data(df, granularity, granularity_unit)
 
     df['returns'] = df['price'].pct_change()
     df['cumulative-returns'] = (1 + df['returns']).cumprod()
@@ -84,8 +85,8 @@ def lambda_handler(event, context):
     to_date = event["queryStringParameters"]["toDate"]
     initial_investment = float(event["queryStringParameters"]["initialInvestment"])
     risk_free_rate = float(event["queryStringParameters"]["riskFreeRate"])
-    granularity = event["queryStringParameters"]["granularity"]
-    granularity_unit = int(event["queryStringParameters"]["granularityUnit"])
+    granularity = int(event["queryStringParameters"]["granularity"])
+    granularity_unit = event["queryStringParameters"]["granularityUnit"]
 
     try:
         response = table.query(
@@ -113,7 +114,7 @@ def lambda_handler(event, context):
                 },
             }
 
-        df = get_data_df(items, initial_investment, granularity_unit, granularity)
+        df = get_data_df(items, initial_investment, granularity, granularity_unit)
 
         volatility = get_volatility(df)
         sharpe_ratio = get_sharpe_ratio(df, risk_free_rate / 100)
