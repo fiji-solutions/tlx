@@ -4,7 +4,6 @@ from botocore.exceptions import ClientError
 import os
 import numpy as np
 import pandas as pd
-from decimal import Decimal
 
 
 def get_data_df(data, initial_investment):
@@ -30,12 +29,14 @@ def get_volatility(df):
 
 def get_sharpe_ratio(df, risk_free_rate=0):
     mean_return = df['returns'].mean()
+
     return (mean_return - risk_free_rate) / get_volatility(df)
 
 
 def get_sortino_ratio(df, risk_free_rate=0):
     downside_volatility = df[df['returns'] < 0]['returns'].std()
     mean_return = df['returns'].mean()
+
     return (mean_return - risk_free_rate) / downside_volatility
 
 
@@ -48,7 +49,7 @@ def get_omega_ratio(df, threshold=0):
     prob_gains = 1 - cdf[np.searchsorted(sorted_returns, sorted_returns[sorted_returns > threshold]) - 1]
 
     losses = threshold - sorted_returns[sorted_returns <= threshold]
-    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns <= threshold)]
+    prob_losses = cdf[np.searchsorted(sorted_returns, sorted_returns <= threshold) - 1]
 
     weighted_gains = np.sum(gains * prob_gains)
     weighted_losses = np.sum(losses * prob_losses)
