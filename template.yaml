@@ -155,7 +155,7 @@ Resources:
         SolIndexSchedule:
           Type: Schedule
           Properties:
-            Schedule: "cron(* * * * ? *)"
+            Schedule: "cron(0 * * * ? *)"
 
   SolIndexFunction:
     Type: AWS::Serverless::Function
