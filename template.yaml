@@ -137,7 +137,7 @@ Resources:
             Path: /toros-export
             Method: get
 
-  SolIndexCronFunction:
+  SolIndexFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: solindex_cron/
@@ -156,57 +156,6 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: "rate(1 hour)"
-
-  SolIndexFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: solindex/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Events:
-        Toros:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HelloWorldApi
-            Path: /solindex
-            Method: get
-
-  SolIndexExportFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: solindex_export/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Events:
-        Toros:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HelloWorldApi
-            Path: /solindex-export
-            Method: get
-
-  SolIndexSourcesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: solindex_sources/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Events:
-        Toros:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HelloWorldApi
-            Path: /solindex-sources
-            Method: get
 
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
