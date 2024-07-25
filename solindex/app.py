@@ -4,6 +4,7 @@ from botocore.exceptions import ClientError
 import os
 import numpy as np
 import pandas as pd
+from decimal import Decimal
 
 
 def get_data_df(data, initial_investment):
