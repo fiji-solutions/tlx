@@ -149,8 +149,6 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref DynamoDBTable
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable2
 
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
