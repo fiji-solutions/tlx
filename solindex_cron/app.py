@@ -5,6 +5,7 @@ from datetime import datetime
 import boto3
 from botocore.exceptions import ClientError
 import os
+from decimal import Decimal
 
 
 def fetch_data(url):
@@ -36,7 +37,7 @@ def parse_html(html):
                      .replace('₉', '9')
                      )
             try:
-                price = float(price)
+                price = Decimal(price)
                 data.append((name, price))
             except ValueError:
                 print(f"Skipping invalid price: {price}")
