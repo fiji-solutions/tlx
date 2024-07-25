@@ -49,13 +49,15 @@ def store_data_in_dynamodb(data, timestamp):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ["table"])
 
+    unique_items = {(name, timestamp): price for name, price in data}
+
     with table.batch_writer() as batch:
-        for name, price in data:
+        for (name, ts), price in unique_items.items():
             try:
                 batch.put_item(
                     Item={
                         'CoinName': name,
-                        'Timestamp': timestamp,
+                        'Timestamp': ts,
                         'Price': price
                     }
                 )
@@ -67,7 +69,9 @@ def store_coin_source_in_dynamodb(coin_source_data):
     dynamodb = boto3.resource('dynamodb')
     coin_source_table = dynamodb.Table(os.environ["table2"])
 
-    for name, source in coin_source_data:
+    unique_coin_sources = {(name, source) for name, source in coin_source_data}
+
+    for name, source in unique_coin_sources:
         try:
             response = coin_source_table.get_item(
                 Key={
@@ -94,8 +98,8 @@ def lambda_handler(event, context):
         "https://www.solindex.xyz/index/cats": "cats"
     }
 
-    all_data = set()
-    coin_source_data = set()
+    all_data = []
+    coin_source_data = []
     timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S+00:00')
 
     for url, source in urls.items():
@@ -103,13 +107,13 @@ def lambda_handler(event, context):
             html = fetch_data(url)
             data = parse_html(html)
             for name, price in data:
-                all_data.add((name, price))
-                coin_source_data.add((name, source))
+                all_data.append((name, price))
+                coin_source_data.append((name, source))
         except Exception as e:
             print(f"Error fetching data from {url}: {e}")
 
-    store_data_in_dynamodb(list(all_data), timestamp)  # Convert set back to list
-    store_coin_source_in_dynamodb(list(coin_source_data))  # Convert set back to list
+    store_data_in_dynamodb(all_data, timestamp)
+    store_coin_source_in_dynamodb(coin_source_data)
 
     return {
         'statusCode': 200,
