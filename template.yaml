@@ -12,7 +12,7 @@ Globals:
     MemorySize: 128
     Environment:
       Variables:
-        table: !Sub ${demoDynamoDBTable}
+        table: !Sub ${DynamoDBTable}
   Api:
     Cors:
       AllowMethods: "'*'"
