@@ -137,25 +137,25 @@ Resources:
             Path: /toros-export
             Method: get
 
-#  SolIndexCronFunction:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      CodeUri: solindex_cron/
-#      Handler: app.lambda_handler
-#      Runtime: python3.9
-#      Timeout: 120
-#      Architectures:
-#        - x86_64
-#      Policies:
-#        - DynamoDBCrudPolicy:
-#            TableName: !Ref DynamoDBTable
-#        - DynamoDBCrudPolicy:
-#            TableName: !Ref DynamoDBTable2
-#      Events:
-#        SolIndexSchedule:
-#          Type: Schedule
-#          Properties:
-#            Schedule: "rate(1 hour)"
+  SolIndexCronFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: solindex_cron/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 120
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable2
+      Events:
+        SolIndexSchedule:
+          Type: Schedule
+          Properties:
+            Schedule: "rate(1 hour)"
 
   SolIndexFunction:
     Type: AWS::Serverless::Function
