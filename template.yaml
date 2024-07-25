@@ -155,7 +155,7 @@ Resources:
         SolIndexSchedule:
           Type: Schedule
           Properties:
-            Schedule: "rate(1 minute)"
+            Schedule: "cron(* * * * ? *)"
 
   SolIndexFunction:
     Type: AWS::Serverless::Function
