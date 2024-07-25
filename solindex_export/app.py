@@ -23,25 +23,25 @@ def get_data_from_dynamodb(coin_name, from_date, to_date):
         return []
 
 
-def format_timestamp_to_iso(timestamp):
-    dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-    return dt.isoformat(timespec='milliseconds') + 'Z'
-
-
 def lambda_handler(event, context):
     coin_name = event["queryStringParameters"]["coin"]
     from_date = event["queryStringParameters"]["fromDate"]
     to_date = event["queryStringParameters"]["toDate"]
 
     data = get_data_from_dynamodb(coin_name, from_date, to_date)
+    if not data:
+        return {
+            "statusCode": 404,
+            "body": json.dumps('No data found for the given criteria'),
+            'headers': {
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Origin": "*",
+            },
+        }
 
-    formatted_data = []
-    for item in data:
-        timestamp = format_timestamp_to_iso(item['Timestamp'])
-        price = float(item['Price'])
-        formatted_data.append([timestamp, price])
-
-    df = pd.DataFrame(formatted_data, columns=['timestamp', 'price'])
+    df = pd.DataFrame(data)
     csv_data = df.to_csv(index=False, header=False)
 
     return {
