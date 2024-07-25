@@ -166,6 +166,9 @@ Resources:
       Timeout: 120
       Architectures:
         - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
       Events:
         Toros:
           Type: Api
@@ -183,6 +186,9 @@ Resources:
       Timeout: 120
       Architectures:
         - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
       Events:
         Toros:
           Type: Api
@@ -200,6 +206,9 @@ Resources:
       Timeout: 120
       Architectures:
         - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable2
       Events:
         Toros:
           Type: Api
