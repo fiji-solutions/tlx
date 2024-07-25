@@ -13,7 +13,6 @@ Globals:
     Environment:
       Variables:
         table: !Sub ${DynamoDBTable}
-        table2: !Sub ${DynamoDBTable2}
   Api:
     Cors:
       AllowMethods: "'*'"
@@ -52,21 +51,6 @@ Resources:
         - AttributeName: CoinName
           KeyType: HASH
         - AttributeName: Timestamp
-          KeyType: RANGE
-
-  DynamoDBTable2:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      BillingMode: "PAY_PER_REQUEST"
-      AttributeDefinitions:
-        - AttributeName: CoinName
-          AttributeType: S
-        - AttributeName: Source
-          AttributeType: S
-      KeySchema:
-        - AttributeName: CoinName
-          KeyType: HASH
-        - AttributeName: Source
           KeyType: RANGE
 
   HelloWorldFunction:
