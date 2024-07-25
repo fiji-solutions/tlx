@@ -12,8 +12,8 @@ Globals:
     MemorySize: 128
     Environment:
       Variables:
-        table: !Ref DynamoDBTable
-        table2: !Ref DynamoDBTable2
+        table: !Sub ${DynamoDBTable}
+        table2: !Sub ${DynamoDBTable2}
   Api:
     Cors:
       AllowMethods: "'*'"
@@ -151,11 +151,6 @@ Resources:
             TableName: !Ref DynamoDBTable
         - DynamoDBCrudPolicy:
             TableName: !Ref DynamoDBTable2
-      Events:
-        SolIndexSchedule:
-          Type: Schedule
-          Properties:
-            Schedule: "rate(1 hour)"
 
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
