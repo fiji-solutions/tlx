@@ -24,14 +24,24 @@ def parse_html(html):
         cols = row.find_all('td')
         if len(cols) > 1:
             name = cols[0].text.strip()
-            price = Decimal(cols[1].text.strip().replace('$', '').replace('₀', '0').replace('₁', '1')
-                            .replace('₂', '2').replace('₃', '3').replace('₄', '4').replace('₅', '5')
-                            .replace('₆', '6').replace('₇', '7').replace('₈', '8').replace('₉', '9'))
-            market_cap = cols[2].text.strip().replace('B', '000000000').replace('M', '000000')
-            market_cap = int(float(market_cap))
-            weight = Decimal(cols[3].text.strip().replace('%', ''))
-
-            data.append((name, price, market_cap, weight))
+            price = (cols[1].text.strip()
+                     .replace('$', '')
+                     .replace('₀', '0')
+                     .replace('₁', '1')
+                     .replace('₂', '2')
+                     .replace('₃', '3')
+                     .replace('₄', '4')
+                     .replace('₅', '5')
+                     .replace('₆', '6')
+                     .replace('₇', '7')
+                     .replace('₈', '8')
+                     .replace('₉', '9')
+                     )
+            try:
+                price = Decimal(price)
+                data.append((name, price))
+            except ValueError:
+                print(f"Skipping invalid price: {price}")
 
     return data
 
@@ -41,7 +51,7 @@ def store_data_in_dynamodb(data, index_name, timestamp):
     table = dynamodb.Table(os.environ["table"])
 
     with table.batch_writer() as batch:
-        for name, price, market_cap, weight in data:
+        for name, price in data:
             unique_id = str(uuid.uuid4())
             try:
                 batch.put_item(
@@ -50,8 +60,6 @@ def store_data_in_dynamodb(data, index_name, timestamp):
                         'CoinName': name,
                         'Timestamp': timestamp,
                         'Price': price,
-                        'MarketCap': market_cap,
-                        'Weight': float(weight),
                         'UniqueId': unique_id  # Ensure uniqueness
                     }
                 )
