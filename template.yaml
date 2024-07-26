@@ -10,9 +10,9 @@ Globals:
     Runtime: python3.9
     Timeout: 120
     MemorySize: 128
-    Environment:
-      Variables:
-        table: !Ref DynamoDBTable
+#    Environment:
+#      Variables:
+#        table: !Ref DynamoDBTable
   Api:
     Cors:
       AllowMethods: "'*'"
@@ -143,9 +143,9 @@ Resources:
       Timeout: 120
       Architectures:
         - x86_64
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable
+#      Policies:
+#        - DynamoDBCrudPolicy:
+#            TableName: !Ref DynamoDBTable
       Events:
         SolIndexSchedule:
           Type: Schedule
