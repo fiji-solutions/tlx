@@ -13,7 +13,7 @@ Globals:
     Environment:
       Variables:
         table: !Ref DynamoDBTable
-        main_table: !Ref DynamoDBTable2
+        table2: !Ref DynamoDBTable2
   Api:
     Cors:
       AllowMethods: "'*'"
