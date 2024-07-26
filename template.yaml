@@ -10,9 +10,9 @@ Globals:
     Runtime: python3.9
     Timeout: 120
     MemorySize: 128
-#    Environment:
-#      Variables:
-#        table: !Ref DynamoDBTable
+    Environment:
+      Variables:
+        table: !Ref DynamoDBTable
   Api:
     Cors:
       AllowMethods: "'*'"
@@ -38,29 +38,29 @@ Resources:
               Access-Control-Allow-Origin: "'*'"
               Access-Control-Allow-Headers: "'*'"
 
-#  DynamoDBTable:
-#    Type: AWS::DynamoDB::Table
-#    Properties:
-#      BillingMode: "PAY_PER_REQUEST"
-#      AttributeDefinitions:
-#        - AttributeName: CompositeKey
-#          AttributeType: S
-#        - AttributeName: IndexName
-#          AttributeType: S
-#        - AttributeName: Timestamp
-#          AttributeType: S
-#      KeySchema:
-#        - AttributeName: CompositeKey
-#          KeyType: HASH
-#      GlobalSecondaryIndexes:
-#        - IndexName: IndexName-Timestamp-Index
-#          KeySchema:
-#            - AttributeName: IndexName
-#              KeyType: HASH
-#            - AttributeName: Timestamp
-#              KeyType: RANGE
-#          Projection:
-#            ProjectionType: ALL
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: "PAY_PER_REQUEST"
+      AttributeDefinitions:
+        - AttributeName: CompositeKey
+          AttributeType: S
+        - AttributeName: IndexName
+          AttributeType: S
+        - AttributeName: Timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: CompositeKey
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: IndexName-Timestamp-Index
+          KeySchema:
+            - AttributeName: IndexName
+              KeyType: HASH
+            - AttributeName: Timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function
@@ -139,9 +139,9 @@ Resources:
       Timeout: 120
       Architectures:
         - x86_64
-#      Policies:
-#        - DynamoDBCrudPolicy:
-#            TableName: !Ref DynamoDBTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
       Events:
         SolIndexSchedule:
           Type: Schedule
