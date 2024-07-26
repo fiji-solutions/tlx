@@ -45,8 +45,6 @@ Resources:
       AttributeDefinitions:
         - AttributeName: IndexName
           AttributeType: S
-        - AttributeName: CoinName
-          AttributeType: S
         - AttributeName: Timestamp
           AttributeType: S
         - AttributeName: UniqueId
@@ -54,7 +52,7 @@ Resources:
       KeySchema:
         - AttributeName: IndexName
           KeyType: HASH
-        - AttributeName: CoinName
+        - AttributeName: Timestamp
           KeyType: RANGE
       GlobalSecondaryIndexes:
         - IndexName: TimestampIndex
