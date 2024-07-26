@@ -7,10 +7,12 @@ from botocore.exceptions import ClientError
 import os
 from decimal import Decimal
 
+
 def fetch_data(url):
     response = requests.get(url)
     response.raise_for_status()
     return response.text
+
 
 def parse_html(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -42,18 +44,19 @@ def parse_html(html):
 
     return data
 
-def store_data_in_dynamodb(index_name, data, timestamp):
+
+def store_data_in_dynamodb(data, index_name, timestamp):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ["table"])
 
     unique_items = {(index_name, name, timestamp): price for name, price in data}
 
     with table.batch_writer() as batch:
-        for (idx, name, ts), price in unique_items.items():
+        for (index_name, name, ts), price in unique_items.items():
             try:
                 batch.put_item(
                     Item={
-                        'IndexName': idx,
+                        'IndexName': index_name,
                         'CoinName': name,
                         'Timestamp': ts,
                         'Price': price
@@ -61,6 +64,7 @@ def store_data_in_dynamodb(index_name, data, timestamp):
                 )
             except ClientError as e:
                 print(f"Failed to insert {name} into DynamoDB: {e.response['Error']['Message']}")
+
 
 def lambda_handler(event, context):
     urls = {
@@ -76,7 +80,7 @@ def lambda_handler(event, context):
         try:
             html = fetch_data(url)
             data = parse_html(html)
-            store_data_in_dynamodb(index_name, data, timestamp)
+            store_data_in_dynamodb(data, index_name, timestamp)
         except Exception as e:
             print(f"Error fetching data from {url}: {e}")
 
