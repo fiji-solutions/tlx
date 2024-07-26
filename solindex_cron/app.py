@@ -6,6 +6,7 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 from decimal import Decimal
+import uuid
 
 
 def fetch_data(url):
@@ -49,17 +50,17 @@ def store_data_in_dynamodb(data, index_name, timestamp):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ["table"])
 
-    unique_items = {(index_name, name, timestamp): price for name, price in data}
-
     with table.batch_writer() as batch:
-        for (index_name, name, ts), price in unique_items.items():
+        for name, price in data:
+            unique_id = str(uuid.uuid4())
             try:
                 batch.put_item(
                     Item={
                         'IndexName': index_name,
                         'CoinName': name,
-                        'Timestamp': ts,
-                        'Price': price
+                        'Timestamp': timestamp,
+                        'Price': price,
+                        'UniqueId': unique_id  # Ensure uniqueness
                     }
                 )
             except ClientError as e:

@@ -45,21 +45,23 @@ Resources:
       AttributeDefinitions:
         - AttributeName: IndexName
           AttributeType: S
+        - AttributeName: CoinName
+          AttributeType: S
         - AttributeName: Timestamp
           AttributeType: S
-        - AttributeName: CoinName
+        - AttributeName: UniqueId
           AttributeType: S
       KeySchema:
         - AttributeName: IndexName
           KeyType: HASH
-        - AttributeName: Timestamp
+        - AttributeName: CoinName
           KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: CoinNameIndex
+        - IndexName: TimestampIndex
           KeySchema:
-            - AttributeName: CoinName
-              KeyType: HASH
             - AttributeName: Timestamp
+              KeyType: HASH
+            - AttributeName: UniqueId
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
