@@ -74,11 +74,11 @@ def get_simple_omega_ratio(df, threshold=0):
 
 
 def lambda_handler(event, context):
-    index = event['queryStringParameters']['index']
-    start_date = event['queryStringParameters']['start_date']
-    end_date = event['queryStringParameters']['end_date']
-    initial_investment = int(event['queryStringParameters']['initial_investment'])
-    risk_free_rate = float(event['queryStringParameters']['risk_free_rate']) / 100
+    index = event['queryStringParameters']['coin']
+    start_date = event['queryStringParameters']['fromDate']
+    end_date = event['queryStringParameters']['toDate']
+    initial_investment = int(event['queryStringParameters']['initialInvestment'])
+    risk_free_rate = float(event['queryStringParameters']['riskFreeRate']) / 100
 
     data = fetch_market_cap_data(index, start_date, end_date)
 
