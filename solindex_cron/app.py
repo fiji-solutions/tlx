@@ -36,6 +36,7 @@ def parse_html(html):
 
     return data
 
+
 def store_data_in_dynamodb(data, index_name, timestamp):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ["table"])
@@ -43,11 +44,9 @@ def store_data_in_dynamodb(data, index_name, timestamp):
     with table.batch_writer() as batch:
         for name, price, market_cap, weight in data:
             unique_id = str(uuid.uuid4())
-            composite_key = f"{index_name}#{name}#{timestamp}"
             try:
                 batch.put_item(
                     Item={
-                        'CompositeKey': composite_key,
                         'IndexName': index_name,
                         'CoinName': name,
                         'Timestamp': timestamp,
