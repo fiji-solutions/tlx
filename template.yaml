@@ -175,6 +175,23 @@ Resources:
           Properties:
             Schedule: "cron(0 * * * ? *)"
 
+  SolIndexFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: solindex/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 120
+      Architectures:
+        - x86_64
+      Events:
+        Toros:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HelloWorldApi
+            Path: /solindex
+            Method: get
+
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
 #    Properties:
