@@ -43,23 +43,21 @@ Resources:
     Properties:
       BillingMode: "PAY_PER_REQUEST"
       AttributeDefinitions:
+        - AttributeName: CompositeKey
+          AttributeType: S
         - AttributeName: IndexName
           AttributeType: S
         - AttributeName: Timestamp
-          AttributeType: S
-        - AttributeName: UniqueId
           AttributeType: S
       KeySchema:
-        - AttributeName: IndexName
+        - AttributeName: CompositeKey
           KeyType: HASH
-        - AttributeName: Timestamp
-          KeyType: RANGE
       GlobalSecondaryIndexes:
-        - IndexName: TimestampIndex
+        - IndexName: IndexName-Timestamp-Index
           KeySchema:
-            - AttributeName: Timestamp
+            - AttributeName: IndexName
               KeyType: HASH
-            - AttributeName: UniqueId
+            - AttributeName: Timestamp
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
