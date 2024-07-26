@@ -15,6 +15,15 @@ def fetch_data(url):
     return response.text
 
 
+def parse_market_cap(market_cap_str):
+    if 'B' in market_cap_str:
+        return Decimal(market_cap_str.replace('B', '')) * Decimal(1_000_000_000)
+    elif 'M' in market_cap_str:
+        return Decimal(market_cap_str.replace('M', '')) * Decimal(1_000_000)
+    else:
+        return Decimal(market_cap_str)
+
+
 def parse_html(html):
     soup = BeautifulSoup(html, 'html.parser')
     rows = soup.select("table tbody tr")
@@ -27,14 +36,13 @@ def parse_html(html):
             price = Decimal(cols[1].text.strip().replace('$', '').replace('₀', '0').replace('₁', '1')
                             .replace('₂', '2').replace('₃', '3').replace('₄', '4').replace('₅', '5')
                             .replace('₆', '6').replace('₇', '7').replace('₈', '8').replace('₉', '9'))
-            market_cap_str = cols[2].text.strip().replace('B', '000000000').replace('M', '000000')
-            market_cap = Decimal(market_cap_str)
-            weight_str = cols[3].text.strip().replace('%', '')
-            weight = Decimal(weight_str)
+            market_cap = parse_market_cap(cols[2].text.strip())
+            weight = Decimal(cols[3].text.strip().replace('%', ''))
 
             data.append((name, price, market_cap, weight))
 
     return data
+
 
 def store_data_in_dynamodb(data, index_name, timestamp):
     dynamodb = boto3.resource('dynamodb')
