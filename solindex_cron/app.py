@@ -27,9 +27,10 @@ def parse_html(html):
             price = Decimal(cols[1].text.strip().replace('$', '').replace('₀', '0').replace('₁', '1')
                             .replace('₂', '2').replace('₃', '3').replace('₄', '4').replace('₅', '5')
                             .replace('₆', '6').replace('₇', '7').replace('₈', '8').replace('₉', '9'))
-            market_cap = cols[2].text.strip().replace('B', '000000000').replace('M', '000000')
-            market_cap = Decimal(str(float(market_cap)))
-            weight = Decimal(cols[3].text.strip().replace('%', ''))
+            market_cap_str = cols[2].text.strip().replace('B', '000000000').replace('M', '000000')
+            market_cap = Decimal(market_cap_str)
+            weight_str = cols[3].text.strip().replace('%', '')
+            weight = Decimal(weight_str)
 
             data.append((name, price, market_cap, weight))
 
@@ -40,23 +41,26 @@ def store_data_in_dynamodb(data, index_name, timestamp):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ["table"])
 
+    items_to_write = []
+    for name, price, market_cap, weight in data:
+        unique_id = str(uuid.uuid4())
+        item = {
+            'IndexName': index_name,
+            'CoinName': name,
+            'Timestamp': timestamp,
+            'Price': price,
+            'MarketCap': market_cap,
+            'Weight': weight,
+            'UniqueId': unique_id
+        }
+        items_to_write.append(item)
+
     with table.batch_writer() as batch:
-        for name, price, market_cap, weight in data:
-            unique_id = str(uuid.uuid4())
+        for item in items_to_write:
             try:
-                batch.put_item(
-                    Item={
-                        'IndexName': index_name,
-                        'CoinName': name,
-                        'Timestamp': timestamp,
-                        'Price': price,
-                        'MarketCap': market_cap,
-                        'Weight': weight,
-                        'UniqueId': unique_id  # Ensure uniqueness
-                    }
-                )
+                batch.put_item(Item=item)
             except ClientError as e:
-                print(f"Failed to insert {name} into DynamoDB: {e.response['Error']['Message']}")
+                print(f"Failed to insert {item['CoinName']} into DynamoDB: {e.response['Error']['Message']}")
 
 
 def lambda_handler(event, context):
