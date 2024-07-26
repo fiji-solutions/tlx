@@ -28,7 +28,7 @@ def parse_html(html):
                             .replace('₂', '2').replace('₃', '3').replace('₄', '4').replace('₅', '5')
                             .replace('₆', '6').replace('₇', '7').replace('₈', '8').replace('₉', '9'))
             market_cap = cols[2].text.strip().replace('B', '000000000').replace('M', '000000')
-            market_cap = Decimal(str(float(market_cap)))
+            market_cap = int(float(market_cap))
             weight = Decimal(cols[3].text.strip().replace('%', ''))
 
             data.append((name, price, market_cap, weight))
@@ -51,7 +51,7 @@ def store_data_in_dynamodb(data, index_name, timestamp):
                         'Timestamp': timestamp,
                         'Price': price,
                         'MarketCap': market_cap,
-                        'Weight': weight,
+                        'Weight': float(weight),
                         'UniqueId': unique_id  # Ensure uniqueness
                     }
                 )
