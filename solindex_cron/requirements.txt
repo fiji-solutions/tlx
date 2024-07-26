@@ -1,3 +1,5 @@
 requests
 beautifulsoup4
 boto3
+webdriver-manager
+selenium
