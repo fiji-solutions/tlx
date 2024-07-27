@@ -36,6 +36,7 @@ def extract_info(data):
         mcap = clean_and_convert(find_between(obj_str, '"mcap":"', '"').replace("$n", ""))
         liquidity = clean_and_convert(find_between(obj_str, '"liquidity":', ','))
         volume24h = clean_and_convert(find_between(obj_str, '"volume24h":', ','))
+        priceChange24h = clean_and_convert(find_between(obj_str, '"priceChange24h":', ','))
 
         # Append the parsed object to the results
         results.append((
@@ -43,7 +44,8 @@ def extract_info(data):
             price,
             mcap,
             liquidity,
-            volume24h
+            volume24h,
+            priceChange24h
         ))
 
     return results
@@ -109,7 +111,7 @@ def store_data_in_dynamodb(data, index_name, timestamp):
     table = dynamodb.Table(os.environ["table"])
 
     with table.batch_writer() as batch:
-        for name, price, market_cap, liquidity, volume24h in data:
+        for name, price, market_cap, liquidity, volume24h, priceChange24h in data:
             unique_id = str(uuid.uuid4())
             composite_key = f"{index_name}#{name}#{timestamp}"
             try:
@@ -123,6 +125,7 @@ def store_data_in_dynamodb(data, index_name, timestamp):
                         'MarketCap': market_cap,
                         'Liquidity': liquidity,
                         'Volume24h': volume24h,
+                        'PriceChange24h': priceChange24h,
                         'UniqueId': unique_id
                     }
                 )
