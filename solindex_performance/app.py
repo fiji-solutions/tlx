@@ -135,13 +135,14 @@ def simple_omega_ratio_calculation(returns, threshold=0):
 
 def lambda_handler(event, context):
     index_name = event["queryStringParameters"]["index"]
+    start_date = event["queryStringParameters"]["fromDate"]
     end_date = event["queryStringParameters"]["toDate"]
     initial_investment = float(event["queryStringParameters"]["initialInvestment"])
     risk_free_rate = float(event["queryStringParameters"]["riskFreeRate"]) / 100
 
     # Adjust start_time and end_time
+    start_time = f"{start_date} 00:00:00+00:00"
     end_time = f"{end_date} 23:59:59+00:00"
-    start_time = (datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S%z') - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S%z')
 
     # Ensure timestamps are correctly formatted
     print(f"Start time: {start_time}, End time: {end_time}")  # Debug print
