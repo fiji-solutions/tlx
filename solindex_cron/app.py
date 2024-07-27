@@ -173,6 +173,12 @@ def lambda_handler(event, context):
             total_market_cap = sum([item[2] for item in data])
             main_page_data.append((index_name, total_market_cap))
 
+            # Calculate market cap for first 10 and second 10 entries
+            first_10_market_cap = sum([item[2] for item in data[:10]])
+            second_10_market_cap = sum([item[2] for item in data[10:20]])
+            main_page_data.append((index_name + '1', first_10_market_cap))
+            main_page_data.append((index_name + '2', second_10_market_cap))
+
         except Exception as e:
             print(f"Error fetching data from {url}: {e}")
 
