@@ -54,6 +54,10 @@ def resample_data(data, granularity, granularity_unit):
     else:
         resampled_data = df
 
+    # Handle NaN values by forward-filling them
+    resampled_data.fillna(method='ffill', inplace=True)
+    resampled_data.fillna(method='bfill', inplace=True)
+
     return resampled_data
 
 # Function to calculate the weighted allocation including price change
@@ -148,6 +152,15 @@ def simulate_investment(data_list, initial_investment):
 # Additional functions for performance metrics
 def calculate_performance_metrics(portfolio_values, risk_free_rate):
     returns = np.diff(portfolio_values) / portfolio_values[:-1]
+    returns = returns[~np.isnan(returns)]  # Remove NaN values from returns
+    if len(returns) == 0:  # If no valid returns, set metrics to None
+        return {
+            "volatility": None,
+            "sharpe_ratio": None,
+            "sortino_ratio": None,
+            "omega_ratio": None,
+            "simple_omega_ratio": None
+        }
     volatility = returns.std()
     sharpe_ratio = (returns.mean() - risk_free_rate) / volatility if volatility != 0 else np.nan
     sortino_ratio = (returns.mean() - risk_free_rate) / returns[returns < 0].std() if returns[
@@ -244,5 +257,5 @@ def lambda_handler(event, context):
             "final_portfolio_value": portfolio_values[-1],
             "total_capital_gains": detailed_results[-1]['capital_gains'],
             **performance_metrics
-        }),
+        }, default=str),
     }
