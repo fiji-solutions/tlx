@@ -7,6 +7,10 @@ import os
 dynamodb = boto3.client('dynamodb')
 
 def fetch_data_from_dynamodb(index_name, start_time, end_time):
+    print("Table name: ", os.environ["table"])
+    print("indexName: ", index_name)
+    print("startTime: ", start_time)
+    print("endTime: ", end_time)
     response = dynamodb.query(
         TableName=os.environ["table"],
         IndexName='IndexName-Timestamp-Index',
