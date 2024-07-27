@@ -99,7 +99,10 @@ def simulate_investment(data_list, initial_investment):
             for token in tokens_to_sell:
                 if token in portfolio_distribution:
                     old_value = portfolio_distribution[token]
-                    price_change = data_list[previous_timestamp][token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
+                    if token in data_list[previous_timestamp]:
+                        price_change = data_list[previous_timestamp][token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
+                    else:
+                        price_change = 1  # No price change if the token was not in the previous timestamp
                     amount_sold = old_value
                     gains = amount_sold * (price_change - 1)
                     capital_gains += gains
@@ -129,7 +132,7 @@ def simulate_investment(data_list, initial_investment):
         portfolio_distribution = new_portfolio_distribution
         portfolio_value = sum(
             portfolio_distribution[token] * data[token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
-            for token in data)
+            for token in data if token in data_list[list(data_list.keys())[0]])
 
         detailed_results.append({
             "timestamp": timestamp,
