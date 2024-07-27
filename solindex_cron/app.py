@@ -9,6 +9,67 @@ from decimal import Decimal
 import uuid
 
 
+def extract_info(data):
+    results = []
+    while data:
+        # Find the start of the next object
+        data = data.replace("\\\"", "\"")
+        start_idx = data.find('{"id":')
+        if start_idx == -1:
+            break
+
+        # Find the end of the current object
+        end_idx = data.find('}', start_idx)
+        while data[end_idx + 1] == '}':  # in case of nested JSON objects
+            end_idx = data.find('}', end_idx + 1)
+        end_idx += 1
+
+        # Extract the object string
+        obj_str = data[start_idx:end_idx]
+
+        # Remove this object from the data
+        data = data[end_idx + 1:]
+
+        # Parse the object string manually
+        symbol = find_between(obj_str, '"symbol":"', '"')
+        price = clean_and_convert(find_between(obj_str, '"price":', '}'))
+        mcap = clean_and_convert(find_between(obj_str, '"mcap":"', '"').replace("$n", ""))
+        liquidity = clean_and_convert(find_between(obj_str, '"liquidity":', ','))
+        volume24h = clean_and_convert(find_between(obj_str, '"volume24h":', ','))
+
+        # Append the parsed object to the results
+        results.append((
+            symbol,
+            price,
+            mcap,
+            liquidity,
+            volume24h
+        ))
+
+    return results
+
+
+def clean_and_convert(value):
+    if value is None:
+        return None
+    value = value.replace(",", "").replace("$", "")
+    try:
+        return Decimal(value)
+    except ValueError:
+        return value
+
+
+def find_between(s, start, end):
+    start_idx = s.find(start)
+    if start_idx == -1:
+        return None
+    start_idx += len(start)
+    end_idx = s.find(end, start_idx)
+    if end_idx == -1:
+        return None
+    return s[start_idx:end_idx]
+
+
 def fetch_data(url):
     response = requests.get(url)
     response.raise_for_status()
@@ -26,22 +87,21 @@ def parse_market_cap(market_cap_str):
 
 def parse_html(html):
     soup = BeautifulSoup(html, 'html.parser')
-    rows = soup.select("table tbody tr")
+    script_rows = soup.select("script")
     data = []
 
-    for row in rows:
-        cols = row.find_all('td')
-        if len(cols) > 1:
-            name = cols[0].text.strip()
-            price = Decimal(cols[1].text.strip().replace('$', '').replace('₀', '0').replace('₁', '1')
-                            .replace('₂', '2').replace('₃', '3').replace('₄', '4').replace('₅', '5')
-                            .replace('₆', '6').replace('₇', '7').replace('₈', '8').replace('₉', '9'))
-            market_cap = parse_market_cap(cols[2].text.strip())
-            weight = Decimal(cols[3].text.strip().replace('%', ''))
+    script_index = 0
+    for count, script in enumerate(script_rows):
+        if '\\"price\\"' in script.text:
+            script_index = count
+            break
 
-            data.append((name, price, market_cap, weight))
+    whole_string = ""
+    for i in range(20):
+        cleaned_string = script_rows[script_index + i].text.replace('self.__next_f.push([1,"21:', '').replace('"])', '')
+        whole_string = whole_string + cleaned_string
 
-    return data
+    return extract_info(whole_string.replace("self.__next_f.push([1,\"", "").replace("\\\"", "\""))
 
 
 def store_data_in_dynamodb(data, index_name, timestamp):
@@ -49,7 +109,7 @@ def store_data_in_dynamodb(data, index_name, timestamp):
     table = dynamodb.Table(os.environ["table"])
 
     with table.batch_writer() as batch:
-        for name, price, market_cap, weight in data:
+        for name, price, market_cap, liquidity, volume24h in data:
             unique_id = str(uuid.uuid4())
             composite_key = f"{index_name}#{name}#{timestamp}"
             try:
@@ -61,7 +121,8 @@ def store_data_in_dynamodb(data, index_name, timestamp):
                         'Timestamp': timestamp,
                         'Price': price,
                         'MarketCap': market_cap,
-                        'Weight': weight,
+                        'Liquidity': liquidity,
+                        'Volume24h': volume24h,
                         'UniqueId': unique_id
                     }
                 )
