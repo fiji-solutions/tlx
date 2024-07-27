@@ -10,7 +10,11 @@ def fetch_data_from_dynamodb(index_name, start_time, end_time):
     response = dynamodb.query(
         TableName=os.environ["table"],
         IndexName='IndexName-Timestamp-Index',
-        KeyConditionExpression='IndexName = :indexName AND Timestamp BETWEEN :startTime AND :endTime',
+        KeyConditionExpression='#indexName = :indexName AND #ts BETWEEN :startTime AND :endTime',
+        ExpressionAttributeNames={
+            '#indexName': 'IndexName',
+            '#ts': 'Timestamp'
+        },
         ExpressionAttributeValues={
             ':indexName': {'S': index_name},
             ':startTime': {'S': start_time},
