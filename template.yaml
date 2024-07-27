@@ -207,8 +207,6 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref DynamoDBTable
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable2
       Events:
         Toros:
           Type: Api

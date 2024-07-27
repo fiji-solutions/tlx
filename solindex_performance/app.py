@@ -8,70 +8,6 @@ from datetime import datetime, timedelta
 
 dynamodb = boto3.client('dynamodb')
 
-# Function to fetch market cap data from DynamoDB
-def fetch_market_cap_data(index_name, start_date, end_date):
-    dynamodb_resource = boto3.resource('dynamodb')
-    table = dynamodb_resource.Table(os.environ["table2"])
-
-    response = table.query(
-        IndexName="IndexName-Timestamp-Index",
-        KeyConditionExpression=boto3.dynamodb.conditions.Key('IndexName').eq(index_name) &
-                               boto3.dynamodb.conditions.Key('Timestamp').between(start_date, end_date)
-    )
-
-    items = response['Items']
-    return items
-
-# Function to convert Decimal to float
-def decimal_to_float(obj):
-    if isinstance(obj, Decimal):
-        return float(obj)
-    raise TypeError
-
-# Function to aggregate market cap data
-def aggregate_data(data, granularity, granularity_unit):
-    aggregated_data = []
-    current_time = None
-    current_sum = 0
-    count = 0
-
-    for item in data:
-        timestamp = datetime.strptime(item['Timestamp'], "%Y-%m-%d %H:%M:%S%z")
-        marketcap = decimal_to_float(item['MarketCap'])
-
-        if current_time is None:
-            current_time = timestamp
-            current_sum = marketcap
-            count = 1
-        else:
-            time_diff = timestamp - current_time
-            if granularity == 'HOURS' and time_diff < timedelta(hours=granularity_unit):
-                current_sum += marketcap
-                count += 1
-            elif granularity == 'DAYS' and time_diff < timedelta(days=granularity_unit):
-                current_sum += marketcap
-                count += 1
-            elif granularity == 'WEEKS' and time_diff < timedelta(weeks=granularity_unit):
-                current_sum += marketcap
-                count += 1
-            else:
-                aggregated_data.append({
-                    'timestamp': current_time.strftime("%Y-%m-%d %H:%M:%S%z"),
-                    'MarketCap': current_sum / count
-                })
-                current_time = timestamp
-                current_sum = marketcap
-                count = 1
-
-    if count > 0:
-        aggregated_data.append({
-            'timestamp': current_time.strftime("%Y-%m-%d %H:%M:%S%z"),
-            'MarketCap': current_sum / count
-        })
-
-    return aggregated_data
-
-# Function to fetch investment data from DynamoDB
 def fetch_data_from_dynamodb(index_name, start_time, end_time):
     response = dynamodb.query(
         TableName=os.environ["table"],
@@ -89,7 +25,6 @@ def fetch_data_from_dynamodb(index_name, start_time, end_time):
     )
     return response['Items']
 
-# Function to parse investment data
 def parse_dynamodb_data(items):
     data = []
     for item in items:
@@ -106,7 +41,6 @@ def parse_dynamodb_data(items):
         })
     return data
 
-# Function to resample data based on granularity
 def resample_data(data, granularity, granularity_unit):
     df = pd.DataFrame(data)
     df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -228,8 +162,8 @@ def lambda_handler(event, context):
     start_time = f"{start_date} 00:00:00+00:00"
     end_time = f"{end_date} 23:59:59+00:00"
 
-    # Fetch data from DynamoDB
     items = fetch_data_from_dynamodb(index_name, start_time, end_time)
+
     data_list = parse_dynamodb_data(items)
 
     # Resample data based on granularity and granularity unit
@@ -257,15 +191,12 @@ def lambda_handler(event, context):
     portfolio_values = [result['portfolio_value'] for result in detailed_results]
     performance_metrics = calculate_performance_metrics(portfolio_values, risk_free_rate)
 
-    # Fetch and aggregate market cap data
-    market_cap_data = fetch_market_cap_data(index_name, start_date, end_date)
-    aggregated_market_cap_data = aggregate_data(market_cap_data, granularity, granularity_unit)
-
-    # Merge market cap data with the detailed results
+    # Calculate the total market cap for each timestamp
     for result in detailed_results:
-        matching_market_cap = next((item for item in aggregated_market_cap_data if item['timestamp'] == result['timestamp']), None)
-        if matching_market_cap:
-            result['MarketCap'] = matching_market_cap['MarketCap']
+        timestamp = result['timestamp']
+        if timestamp in data_dict:
+            total_market_cap = sum(data_dict[timestamp][coin]['Market Cap'] for coin in data_dict[timestamp])
+            result['MarketCap'] = total_market_cap
 
     return {
         "statusCode": 200,
