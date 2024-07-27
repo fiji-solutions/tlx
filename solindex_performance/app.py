@@ -7,10 +7,6 @@ import pandas as pd
 dynamodb = boto3.client('dynamodb')
 
 def fetch_data_from_dynamodb(index_name, start_time, end_time):
-    print("Table name: ", os.environ["table"])
-    print("indexName: ", index_name)
-    print("startTime: ", start_time)
-    print("endTime: ", end_time)
     response = dynamodb.query(
         TableName=os.environ["table"],
         IndexName='IndexName-Timestamp-Index',
@@ -102,8 +98,6 @@ def simulate_investment(data_list, initial_investment):
                         capital_gains += gains
                         hourly_gains += gains
 
-            print(f"Total Capital Gains: ${capital_gains:.2f}")
-
         portfolio_distribution = new_portfolio_distribution
         portfolio_value = sum(
             portfolio_distribution[token] * data[token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
@@ -117,7 +111,6 @@ def simulate_investment(data_list, initial_investment):
 
         previous_timestamp = timestamp
 
-    print(f"\nTotal Capital Gains: ${capital_gains:.2f}")
     return detailed_results
 
 
@@ -174,28 +167,9 @@ def lambda_handler(event, context):
     start_time = f"{start_date} 00:00:00+00:00"
     end_time = f"{end_date} 23:59:59+00:00"
 
-    # Ensure timestamps are correctly formatted
-    print(f"Start time: {start_time}, End time: {end_time}")  # Debug print
-
-    # Fetch data from DynamoDB
     items = fetch_data_from_dynamodb(index_name, start_time, end_time)
-    print(f"Fetched items: {items}")  # Debug print
-
-    if not items:
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": "No data found for the given index and time range"})
-        }
 
     data_list = parse_dynamodb_data(items)
-    print(f"Parsed data: {data_list}")  # Debug print
-
-    # Ensure there is data to process
-    if not data_list:
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": "No valid data to process"})
-        }
 
     # Resample data based on granularity and granularity unit
     resampled_data = resample_data(data_list, granularity, granularity_unit)
