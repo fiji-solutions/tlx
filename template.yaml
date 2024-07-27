@@ -186,33 +186,13 @@ Resources:
         - x86_64
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable2
-      Events:
-        Toros:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HelloWorldApi
-            Path: /solindex
-            Method: get
-
-  SolIndexPerformanceFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: solindex_performance/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Policies:
-        - DynamoDBCrudPolicy:
             TableName: !Ref DynamoDBTable
       Events:
         Toros:
           Type: Api
           Properties:
             RestApiId: !Ref HelloWorldApi
-            Path: /solindex-performance
+            Path: /solindex
             Method: get
 
 #  HelloWorldApiStage:
