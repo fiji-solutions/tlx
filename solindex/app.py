@@ -1,6 +1,7 @@
 import boto3
 import os
 import json
+from decimal import Decimal
 
 
 def fetch_market_cap_data(index_name):
@@ -16,6 +17,12 @@ def fetch_market_cap_data(index_name):
     return items
 
 
+def decimal_to_float(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
+
+
 def lambda_handler(event, context):
     index = event['queryStringParameters']['index']
 
@@ -24,7 +31,7 @@ def lambda_handler(event, context):
     json_data = [
         {
             "timestamp": item['Timestamp'],
-            "marketcap": item['MarketCap']
+            "marketcap": decimal_to_float(item['MarketCap'])
         } for item in data
     ]
 
