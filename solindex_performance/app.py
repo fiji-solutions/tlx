@@ -179,10 +179,17 @@ def lambda_handler(event, context):
     # Convert resampled data back to the required format for investment simulation
     data_dict = {}
     for record in resampled_data:
-        timestamp = record.pop('timestamp')
+        timestamp = record['timestamp']
+        coin = record['coin']
         if timestamp not in data_dict:
             data_dict[timestamp] = {}
-        data_dict[timestamp][record['coin']] = record
+        data_dict[timestamp][coin] = {
+            "Price": record['Price'],
+            "Market Cap": record['Market Cap'],
+            "Liquidity": record['Liquidity'],
+            "Volume24h": record['Volume24h'],
+            "Price Change": record['Price Change']
+        }
 
     # Simulate the investment
     detailed_results = simulate_investment(data_dict, initial_investment)
