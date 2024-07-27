@@ -35,7 +35,7 @@ def parse_dynamodb_data(items):
             data[timestamp] = {}
         data[timestamp][item['CoinName']['S']] = {
             'Price': float(item['Price']['N']),
-            'MarketCap': float(item['MarketCap']['N']),
+            'Market Cap': float(item['MarketCap']['N']),
             'Liquidity': float(item['Liquidity']['N']),
             'Volume24h': float(item['Volume24h']['N']),
             'Price Change': float(item['PriceChange24h']['N']) if "PriceChange24h" in item else 0
