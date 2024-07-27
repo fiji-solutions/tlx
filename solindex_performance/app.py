@@ -102,10 +102,13 @@ def simulate_investment(data_list, initial_investment):
             portfolio_distribution[token] * data[token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
             for token in data)
 
+        total_market_cap = sum(data[token]['Market Cap'] for token in data)
+
         detailed_results.append({
             "timestamp": timestamp,
             "portfolio_value": portfolio_value,
-            "capital_gains": capital_gains
+            "capital_gains": capital_gains,
+            "MarketCap": total_market_cap
         })
 
         previous_timestamp = timestamp
@@ -190,13 +193,6 @@ def lambda_handler(event, context):
     # Calculate performance metrics
     portfolio_values = [result['portfolio_value'] for result in detailed_results]
     performance_metrics = calculate_performance_metrics(portfolio_values, risk_free_rate)
-
-    # Calculate the total market cap for each timestamp
-    for result in detailed_results:
-        timestamp = result['timestamp']
-        if timestamp in data_dict:
-            total_market_cap = sum(data_dict[timestamp][coin]['Market Cap'] for coin in data_dict[timestamp])
-            result['MarketCap'] = total_market_cap
 
     return {
         "statusCode": 200,
