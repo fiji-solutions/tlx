@@ -6,7 +6,6 @@ import os
 
 dynamodb = boto3.client('dynamodb')
 
-
 def fetch_data_from_dynamodb(index_name, start_time, end_time):
     response = dynamodb.query(
         TableName=os.environ["table"],
@@ -24,7 +23,6 @@ def fetch_data_from_dynamodb(index_name, start_time, end_time):
     )
     return response['Items']
 
-
 def parse_dynamodb_data(items):
     data = {}
     for item in items:
@@ -40,7 +38,6 @@ def parse_dynamodb_data(items):
         }
     return data
 
-
 # Function to calculate the weighted allocation including price change
 def calculate_allocations(data):
     weights = {}
@@ -55,7 +52,6 @@ def calculate_allocations(data):
         total_weight += weight
     allocations = {token: (weight / total_weight) * 100 for token, weight in weights.items()}
     return allocations
-
 
 # Function to simulate investing in the index and calculating performance and transactions
 def simulate_investment(data_list, initial_investment):
@@ -96,7 +92,6 @@ def simulate_investment(data_list, initial_investment):
     print(f"\nTotal Capital Gains: ${capital_gains:.2f}")
     return portfolio_values, capital_gains
 
-
 # Additional functions for performance metrics
 def calculate_performance_metrics(portfolio_values, risk_free_rate):
     returns = np.diff(portfolio_values) / portfolio_values[:-1]
@@ -116,7 +111,6 @@ def calculate_performance_metrics(portfolio_values, risk_free_rate):
             simple_omega_ratio) else None
     }
 
-
 def omega_ratio_calculation(returns, threshold=0):
     sorted_returns = np.sort(returns)
     cdf = np.arange(1, len(sorted_returns) + 1) / len(sorted_returns)
@@ -129,13 +123,11 @@ def omega_ratio_calculation(returns, threshold=0):
     omega = weighted_gains / weighted_losses if weighted_losses != 0 else np.inf
     return omega
 
-
 def simple_omega_ratio_calculation(returns, threshold=0):
     gains = returns[returns > threshold].sum() - threshold * len(returns[returns > threshold])
     losses = abs(returns[returns <= threshold].sum() - threshold * len(returns[returns <= threshold]))
     omega = gains / losses if losses != 0 else np.inf
     return omega
-
 
 def lambda_handler(event, context):
     index_name = event["queryStringParameters"]["index"]
@@ -144,18 +136,41 @@ def lambda_handler(event, context):
     risk_free_rate = float(event["queryStringParameters"]["riskFreeRate"]) / 100
 
     # Adjust start_time and end_time
-    end_time = f"{end_date} 00:00:00+00:00"
-    start_time = (datetime.fromisoformat(end_time) - timedelta(days=1)).isoformat()
+    end_time = f"{end_date} 23:59:59+00:00"
+    start_time = (datetime.fromisoformat(end_time) - timedelta(days=1)).isoformat().replace("T", " ")
+
+    # Ensure timestamps are correctly formatted
+    print(f"Start time: {start_time}, End time: {end_time}")  # Debug print
 
     # Fetch data from DynamoDB
     items = fetch_data_from_dynamodb(index_name, start_time, end_time)
     print(f"Fetched items: {items}")  # Debug print
 
+    if not items:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "No data found for the given index and time range"})
+        }
+
     data_list = parse_dynamodb_data(items)
     print(f"Parsed data: {data_list}")  # Debug print
 
+    # Ensure there is data to process
+    if not data_list:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "No valid data to process"})
+        }
+
     # Simulate the investment
     portfolio_values, capital_gains = simulate_investment(data_list, initial_investment)
+
+    # Ensure there are portfolio values to calculate
+    if not portfolio_values:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "No portfolio values calculated"})
+        }
 
     # Calculate performance metrics
     performance_metrics = calculate_performance_metrics(portfolio_values, risk_free_rate)
