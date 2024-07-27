@@ -126,7 +126,7 @@ def simulate_investment(data_list, initial_investment):
                     old_value = portfolio_distribution[token]
                     if token in data_list[previous_timestamp]:
                         price_change = data_list[previous_timestamp][token]["Price"] / \
-                                       data_list[list(data_list.keys())[0]][token]["Price"]
+                                       data_list[list(data_list.keys())[0]].get(token, {"Price": 1})["Price"]
                     else:
                         price_change = 1
                     amount_sold = old_value
@@ -146,7 +146,8 @@ def simulate_investment(data_list, initial_investment):
                     old_value = portfolio_distribution[token]
                     new_value = new_portfolio_distribution[token]
                     if token in data_list[previous_timestamp]:
-                        price_change = data[token]["Price"] / data_list[previous_timestamp][token]["Price"]
+                        price_change = data[token]["Price"] / data_list[previous_timestamp].get(token, {"Price": 1})[
+                            "Price"]
                         if new_value < old_value:
                             amount_sold = old_value - new_value
                             gains = amount_sold * (price_change - 1)
@@ -155,7 +156,8 @@ def simulate_investment(data_list, initial_investment):
 
         portfolio_distribution = new_portfolio_distribution
         portfolio_value = sum(
-            portfolio_distribution[token] * data[token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
+            portfolio_distribution[token] * data[token]["Price"] /
+            data_list[list(data_list.keys())[0]].get(token, {"Price": 1})["Price"]
             for token in data if token in data_list[list(data_list.keys())[0]])
 
         detailed_results.append({
