@@ -179,7 +179,7 @@ def lambda_handler(event, context):
     # Convert resampled data back to the required format for investment simulation
     data_dict = {}
     for record in resampled_data.to_dict(orient='records'):
-        timestamp = record['timestamp']
+        timestamp = record['timestamp'].strftime('%Y-%m-%d %H:%M:%S')  # Convert timestamp to string
         coin = record['coin']
         if timestamp not in data_dict:
             data_dict[timestamp] = {}
