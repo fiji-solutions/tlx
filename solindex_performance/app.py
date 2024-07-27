@@ -137,7 +137,7 @@ def lambda_handler(event, context):
 
     # Adjust start_time and end_time
     end_time = f"{end_date} 23:59:59+00:00"
-    start_time = (datetime.fromisoformat(end_time) - timedelta(days=1)).isoformat().replace("T", " ")
+    start_time = (datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S%z') - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S%z')
 
     # Ensure timestamps are correctly formatted
     print(f"Start time: {start_time}, End time: {end_time}")  # Debug print
