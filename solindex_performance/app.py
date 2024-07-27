@@ -35,7 +35,7 @@ def parse_dynamodb_data(items):
             'MarketCap': float(item['MarketCap']['N']),
             'Liquidity': float(item['Liquidity']['N']),
             'Volume24h': float(item['Volume24h']['N']),
-            'Price Change': float(item['PriceChange24h']['N'] if "PriceChange24h" in item else 0)
+            'Price Change': float(item['PriceChange24h']['N']) if "PriceChange24h" in item else 0
         }
     return data
 
@@ -97,11 +97,12 @@ def simulate_investment(data_list, initial_investment):
 
 
 # Additional functions for performance metrics
-def calculate_performance_metrics(portfolio_values):
+def calculate_performance_metrics(portfolio_values, risk_free_rate):
     returns = np.diff(portfolio_values) / portfolio_values[:-1]
     volatility = returns.std()
-    sharpe_ratio = returns.mean() / volatility if volatility != 0 else np.nan
-    sortino_ratio = returns.mean() / returns[returns < 0].std() if returns[returns < 0].std() != 0 else np.nan
+    sharpe_ratio = (returns.mean() - risk_free_rate) / volatility if volatility != 0 else np.nan
+    sortino_ratio = (returns.mean() - risk_free_rate) / returns[returns < 0].std() if returns[
+                                                                                          returns < 0].std() != 0 else np.nan
     omega_ratio = omega_ratio_calculation(returns)
     simple_omega_ratio = simple_omega_ratio_calculation(returns)
 
@@ -140,6 +141,7 @@ def lambda_handler(event, context):
     start_time = event["queryStringParameters"]["fromDate"]
     end_time = event["queryStringParameters"]["toDate"]
     initial_investment = float(event["queryStringParameters"]["initialInvestment"])
+    risk_free_rate = float(event["queryStringParameters"]["riskFreeRate"]) / 100
 
     # Fetch data from DynamoDB
     items = fetch_data_from_dynamodb(index_name, start_time, end_time)
@@ -149,7 +151,7 @@ def lambda_handler(event, context):
     portfolio_values, capital_gains = simulate_investment(data_list, initial_investment)
 
     # Calculate performance metrics
-    performance_metrics = calculate_performance_metrics(portfolio_values)
+    performance_metrics = calculate_performance_metrics(portfolio_values, risk_free_rate)
 
     return {
         "statusCode": 200,
