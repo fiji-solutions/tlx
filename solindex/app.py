@@ -49,7 +49,7 @@ def aggregate_data(data, granularity, granularity_unit):
                 count += 1
             else:
                 aggregated_data.append({
-                    'Timestamp': current_time.strftime("%Y-%m-%d %H:%M:%S%z"),
+                    'timestamp': current_time.strftime("%Y-%m-%d %H:%M:%S%z"),
                     'MarketCap': current_sum / count
                 })
                 current_time = timestamp
@@ -58,7 +58,7 @@ def aggregate_data(data, granularity, granularity_unit):
 
     if count > 0:
         aggregated_data.append({
-            'Timestamp': current_time.strftime("%Y-%m-%d %H:%M:%S%z"),
+            'timestamp': current_time.strftime("%Y-%m-%d %H:%M:%S%z"),
             'MarketCap': current_sum / count
         })
 
