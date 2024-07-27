@@ -78,6 +78,8 @@ def simulate_investment(data_list, initial_investment):
     capital_gains = 0
     detailed_results = []
 
+    previous_tokens = set()
+
     for hour, timestamp in enumerate(sorted(data_list.keys())):
         data = data_list[timestamp]
         allocations = calculate_allocations(data)
@@ -85,11 +87,30 @@ def simulate_investment(data_list, initial_investment):
         new_portfolio_distribution = {token: (allocation / 100) * portfolio_value for token, allocation in
                                       allocations.items()}
 
+        current_tokens = set(new_portfolio_distribution.keys())
+
         if hour > 0:
             hourly_gains = 0
-            for token, new_value in new_portfolio_distribution.items():
+            tokens_to_sell = previous_tokens - current_tokens
+            tokens_to_buy = current_tokens - previous_tokens
+
+            for token in tokens_to_sell:
                 if token in portfolio_distribution:
                     old_value = portfolio_distribution[token]
+                    price_change = data_list[previous_timestamp][token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
+                    amount_sold = old_value
+                    gains = amount_sold * (price_change - 1)
+                    capital_gains += gains
+                    hourly_gains += gains
+
+            for token in tokens_to_buy:
+                new_value = new_portfolio_distribution[token]
+                portfolio_distribution[token] = new_value
+
+            for token in new_portfolio_distribution:
+                if token in portfolio_distribution:
+                    old_value = portfolio_distribution[token]
+                    new_value = new_portfolio_distribution[token]
                     price_change = data[token]["Price"] / data_list[previous_timestamp][token]["Price"]
                     if new_value < old_value:
                         amount_sold = old_value - new_value
@@ -109,6 +130,7 @@ def simulate_investment(data_list, initial_investment):
         })
 
         previous_timestamp = timestamp
+        previous_tokens = current_tokens
 
     return detailed_results
 
