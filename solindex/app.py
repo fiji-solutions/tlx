@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 
 dynamodb = boto3.client('dynamodb')
 
+
 def fetch_data_from_dynamodb(index_name, start_time, end_time):
     response = dynamodb.query(
         TableName=os.environ["table"],
@@ -25,6 +26,7 @@ def fetch_data_from_dynamodb(index_name, start_time, end_time):
     )
     return response['Items']
 
+
 def parse_dynamodb_data(items):
     data = []
     for item in items:
@@ -40,6 +42,7 @@ def parse_dynamodb_data(items):
             'Price Change': float(item['PriceChange24h']['N']) if 'PriceChange24h' in item else 0
         })
     return data
+
 
 def resample_data(data, granularity, granularity_unit):
     df = pd.DataFrame(data)
@@ -60,7 +63,26 @@ def resample_data(data, granularity, granularity_unit):
 
     return resampled_data
 
-# Function to calculate the weighted allocation including price change
+
+def filter_coins_by_market_cap(data, index_variant):
+    filtered_data = []
+    df = pd.DataFrame(data)
+
+    for timestamp, group in df.groupby('timestamp'):
+        sorted_group = group.sort_values(by='Market Cap', ascending=False)
+
+        if index_variant == '1':
+            top_coins = sorted_group.head(10)
+        elif index_variant == '2':
+            top_coins = sorted_group.iloc[10:20]
+        else:
+            top_coins = sorted_group.head(20)
+
+        filtered_data.extend(top_coins.to_dict(orient='records'))
+
+    return filtered_data
+
+
 def calculate_allocations(data):
     weights = {}
     total_weight = 0
@@ -75,7 +97,7 @@ def calculate_allocations(data):
     allocations = {token: (weight / total_weight) * 100 for token, weight in weights.items()}
     return allocations
 
-# Function to simulate investing in the index and calculating performance and transactions
+
 def simulate_investment(data_list, initial_investment):
     portfolio_value = initial_investment
     portfolio_distribution = {}
@@ -98,29 +120,27 @@ def simulate_investment(data_list, initial_investment):
             tokens_to_sell = previous_tokens - current_tokens
             tokens_to_buy = current_tokens - previous_tokens
 
-            # Sell all tokens that are no longer in the index
             total_sell_value = 0
             for token in tokens_to_sell:
                 if token in portfolio_distribution:
                     old_value = portfolio_distribution[token]
                     if token in data_list[previous_timestamp]:
-                        price_change = data_list[previous_timestamp][token]["Price"] / data_list[list(data_list.keys())[0]][token]["Price"]
+                        price_change = data_list[previous_timestamp][token]["Price"] / \
+                                       data_list[list(data_list.keys())[0]][token]["Price"]
                     else:
-                        price_change = 1  # No price change if the token was not in the previous timestamp
+                        price_change = 1
                     amount_sold = old_value
                     gains = amount_sold * (price_change - 1)
                     capital_gains += gains
                     hourly_gains += gains
                     total_sell_value += amount_sold
 
-            # Distribute the sell value among the new tokens
             if tokens_to_buy:
                 buy_value_per_token = total_sell_value / len(tokens_to_buy)
                 for token in tokens_to_buy:
                     if token in new_portfolio_distribution:
                         new_portfolio_distribution[token] += buy_value_per_token
 
-            # Rebalance the portfolio
             for token in new_portfolio_distribution:
                 if token in portfolio_distribution:
                     old_value = portfolio_distribution[token]
@@ -149,11 +169,11 @@ def simulate_investment(data_list, initial_investment):
 
     return detailed_results
 
-# Additional functions for performance metrics
+
 def calculate_performance_metrics(portfolio_values, risk_free_rate):
     returns = np.diff(portfolio_values) / portfolio_values[:-1]
-    returns = returns[~np.isnan(returns)]  # Remove NaN values from returns
-    if len(returns) == 0:  # If no valid returns, set metrics to None
+    returns = returns[~np.isnan(returns)]
+    if len(returns) == 0:
         return {
             "volatility": None,
             "sharpe_ratio": None,
@@ -177,6 +197,7 @@ def calculate_performance_metrics(portfolio_values, risk_free_rate):
             simple_omega_ratio) else None
     }
 
+
 def omega_ratio_calculation(returns, threshold=0):
     sorted_returns = np.sort(returns)
     cdf = np.arange(1, len(sorted_returns) + 1) / len(sorted_returns)
@@ -189,11 +210,13 @@ def omega_ratio_calculation(returns, threshold=0):
     omega = weighted_gains / weighted_losses if weighted_losses != 0 else np.inf
     return omega
 
+
 def simple_omega_ratio_calculation(returns, threshold=0):
     gains = returns[returns > threshold].sum() - threshold * len(returns[returns > threshold])
     losses = abs(returns[returns <= threshold].sum() - threshold * len(returns[returns <= threshold]))
     omega = gains / losses if losses != 0 else np.inf
     return omega
+
 
 def lambda_handler(event, context):
     index_name = event["queryStringParameters"]["index"]
@@ -204,7 +227,14 @@ def lambda_handler(event, context):
     granularity = event["queryStringParameters"]["granularity"]
     granularity_unit = int(event["queryStringParameters"]["granularityUnit"])
 
-    # Adjust start_time and end_time
+    index_variant = ''  # default to top 20
+    if '1' in index_name:
+        index_variant = '1'
+        index_name = index_name.replace('1', '')
+    elif '2' in index_name:
+        index_variant = '2'
+        index_name = index_name.replace('2', '')
+
     start_time = f"{start_date} 00:00:00+00:00"
     end_time = f"{end_date} 23:59:59+00:00"
 
@@ -212,13 +242,13 @@ def lambda_handler(event, context):
 
     data_list = parse_dynamodb_data(items)
 
-    # Resample data based on granularity and granularity unit
     resampled_data = resample_data(data_list, granularity, granularity_unit)
 
-    # Convert resampled data back to the required format for investment simulation
+    filtered_data = filter_coins_by_market_cap(resampled_data, index_variant)
+
     data_dict = {}
-    for record in resampled_data.to_dict(orient='records'):
-        timestamp = record['timestamp'].strftime('%Y-%m-%d %H:%M:%S')  # Convert timestamp to string
+    for record in filtered_data:
+        timestamp = record['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
         coin = record['coin']
         if timestamp not in data_dict:
             data_dict[timestamp] = {}
@@ -230,14 +260,11 @@ def lambda_handler(event, context):
             "Price Change": record['Price Change']
         }
 
-    # Simulate the investment
     detailed_results = simulate_investment(data_dict, initial_investment)
 
-    # Calculate performance metrics
     portfolio_values = [result['portfolio_value'] for result in detailed_results]
     performance_metrics = calculate_performance_metrics(portfolio_values, risk_free_rate)
 
-    # Calculate the total market cap for each timestamp
     for result in detailed_results:
         timestamp = result['timestamp']
         if timestamp in data_dict:
