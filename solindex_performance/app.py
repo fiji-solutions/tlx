@@ -94,6 +94,8 @@ def simulate_investment(data_list, initial_investment):
             tokens_to_sell = previous_tokens - current_tokens
             tokens_to_buy = current_tokens - previous_tokens
 
+            # Sell all tokens that are no longer in the index
+            total_sell_value = 0
             for token in tokens_to_sell:
                 if token in portfolio_distribution:
                     old_value = portfolio_distribution[token]
@@ -102,21 +104,27 @@ def simulate_investment(data_list, initial_investment):
                     gains = amount_sold * (price_change - 1)
                     capital_gains += gains
                     hourly_gains += gains
+                    total_sell_value += amount_sold
 
-            for token in tokens_to_buy:
-                new_value = new_portfolio_distribution[token]
-                portfolio_distribution[token] = new_value
+            # Distribute the sell value among the new tokens
+            if tokens_to_buy:
+                buy_value_per_token = total_sell_value / len(tokens_to_buy)
+                for token in tokens_to_buy:
+                    if token in new_portfolio_distribution:
+                        new_portfolio_distribution[token] += buy_value_per_token
 
+            # Rebalance the portfolio
             for token in new_portfolio_distribution:
                 if token in portfolio_distribution:
                     old_value = portfolio_distribution[token]
                     new_value = new_portfolio_distribution[token]
-                    price_change = data[token]["Price"] / data_list[previous_timestamp][token]["Price"]
-                    if new_value < old_value:
-                        amount_sold = old_value - new_value
-                        gains = amount_sold * (price_change - 1)
-                        capital_gains += gains
-                        hourly_gains += gains
+                    if token in data_list[previous_timestamp]:
+                        price_change = data[token]["Price"] / data_list[previous_timestamp][token]["Price"]
+                        if new_value < old_value:
+                            amount_sold = old_value - new_value
+                            gains = amount_sold * (price_change - 1)
+                            capital_gains += gains
+                            hourly_gains += gains
 
         portfolio_distribution = new_portfolio_distribution
         portfolio_value = sum(
