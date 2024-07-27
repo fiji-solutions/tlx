@@ -45,19 +45,17 @@ def parse_dynamodb_data(items):
 def resample_data(data, granularity, granularity_unit):
     df = pd.DataFrame(data)
     df['timestamp'] = pd.to_datetime(df['timestamp'])
-    df.set_index('timestamp', inplace=True)
-
-    numeric_cols = df.select_dtypes(include=[np.number]).columns
 
     if granularity == 'HOURS':
-        resampled_data = df[numeric_cols].resample(f'{granularity_unit}H').mean()
+        df.set_index('timestamp', inplace=True)
+        resampled_data = df.groupby('coin').resample(f'{granularity_unit}H').mean().reset_index()
     elif granularity == 'DAYS':
-        resampled_data = df[numeric_cols].resample(f'{granularity_unit}D').mean()
+        df.set_index('timestamp', inplace=True)
+        resampled_data = df.groupby('coin').resample(f'{granularity_unit}D').mean().reset_index()
     else:
-        resampled_data = df[numeric_cols]
+        resampled_data = df
 
-    resampled_data.reset_index(inplace=True)
-    return resampled_data.to_dict('records')
+    return resampled_data
 
 
 # Function to calculate the weighted allocation including price change
@@ -178,8 +176,16 @@ def lambda_handler(event, context):
     # Resample data based on granularity and granularity unit
     resampled_data = resample_data(data_list, granularity, granularity_unit)
 
+    # Convert resampled data back to the required format for investment simulation
+    data_dict = {}
+    for record in resampled_data:
+        timestamp = record.pop('timestamp')
+        if timestamp not in data_dict:
+            data_dict[timestamp] = {}
+        data_dict[timestamp][record['coin']] = record
+
     # Simulate the investment
-    detailed_results = simulate_investment(resampled_data, initial_investment)
+    detailed_results = simulate_investment(data_dict, initial_investment)
 
     # Calculate performance metrics
     portfolio_values = [result['portfolio_value'] for result in detailed_results]
