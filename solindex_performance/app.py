@@ -6,6 +6,7 @@ import pandas as pd
 
 dynamodb = boto3.client('dynamodb')
 
+
 def fetch_data_from_dynamodb(index_name, start_time, end_time):
     response = dynamodb.query(
         TableName=os.environ["table"],
@@ -23,6 +24,7 @@ def fetch_data_from_dynamodb(index_name, start_time, end_time):
     )
     return response['Items']
 
+
 def parse_dynamodb_data(items):
     data = []
     for item in items:
@@ -39,20 +41,24 @@ def parse_dynamodb_data(items):
         })
     return data
 
+
 def resample_data(data, granularity, granularity_unit):
     df = pd.DataFrame(data)
     df['timestamp'] = pd.to_datetime(df['timestamp'])
     df.set_index('timestamp', inplace=True)
 
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+
     if granularity == 'HOURS':
-        resampled_data = df.resample(f'{granularity_unit}H').mean()
+        resampled_data = df[numeric_cols].resample(f'{granularity_unit}H').mean()
     elif granularity == 'DAYS':
-        resampled_data = df.resample(f'{granularity_unit}D').mean()
+        resampled_data = df[numeric_cols].resample(f'{granularity_unit}D').mean()
     else:
-        resampled_data = df
+        resampled_data = df[numeric_cols]
 
     resampled_data.reset_index(inplace=True)
     return resampled_data.to_dict('records')
+
 
 # Function to calculate the weighted allocation including price change
 def calculate_allocations(data):
@@ -68,6 +74,7 @@ def calculate_allocations(data):
         total_weight += weight
     allocations = {token: (weight / total_weight) * 100 for token, weight in weights.items()}
     return allocations
+
 
 # Function to simulate investing in the index and calculating performance and transactions
 def simulate_investment(data_list, initial_investment):
@@ -110,6 +117,7 @@ def simulate_investment(data_list, initial_investment):
 
     return detailed_results
 
+
 # Additional functions for performance metrics
 def calculate_performance_metrics(portfolio_values, risk_free_rate):
     returns = np.diff(portfolio_values) / portfolio_values[:-1]
@@ -129,6 +137,7 @@ def calculate_performance_metrics(portfolio_values, risk_free_rate):
             simple_omega_ratio) else None
     }
 
+
 def omega_ratio_calculation(returns, threshold=0):
     sorted_returns = np.sort(returns)
     cdf = np.arange(1, len(sorted_returns) + 1) / len(sorted_returns)
@@ -141,11 +150,13 @@ def omega_ratio_calculation(returns, threshold=0):
     omega = weighted_gains / weighted_losses if weighted_losses != 0 else np.inf
     return omega
 
+
 def simple_omega_ratio_calculation(returns, threshold=0):
     gains = returns[returns > threshold].sum() - threshold * len(returns[returns > threshold])
     losses = abs(returns[returns <= threshold].sum() - threshold * len(returns[returns <= threshold]))
     omega = gains / losses if losses != 0 else np.inf
     return omega
+
 
 def lambda_handler(event, context):
     index_name = event["queryStringParameters"]["index"]
