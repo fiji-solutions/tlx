@@ -1,5 +1,6 @@
 import json
 import boto3
+from datetime import datetime, timedelta
 import numpy as np
 import os
 
@@ -138,14 +139,20 @@ def simple_omega_ratio_calculation(returns, threshold=0):
 
 def lambda_handler(event, context):
     index_name = event["queryStringParameters"]["index"]
-    start_time = event["queryStringParameters"]["fromDate"]
-    end_time = event["queryStringParameters"]["toDate"]
+    end_date = event["queryStringParameters"]["toDate"]
     initial_investment = float(event["queryStringParameters"]["initialInvestment"])
     risk_free_rate = float(event["queryStringParameters"]["riskFreeRate"]) / 100
 
+    # Adjust start_time and end_time
+    end_time = f"{end_date} 00:00:00+00:00"
+    start_time = (datetime.fromisoformat(end_time) - timedelta(days=1)).isoformat()
+
     # Fetch data from DynamoDB
     items = fetch_data_from_dynamodb(index_name, start_time, end_time)
+    print(f"Fetched items: {items}")  # Debug print
+
     data_list = parse_dynamodb_data(items)
+    print(f"Parsed data: {data_list}")  # Debug print
 
     # Simulate the investment
     portfolio_values, capital_gains = simulate_investment(data_list, initial_investment)
