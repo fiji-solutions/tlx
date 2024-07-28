@@ -259,7 +259,7 @@ Resources:
   CoingeckoSolAllFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: coingecko_sol/
+      CodeUri: coingecko_sol_all/
       Handler: app.lambda_handler
       Runtime: python3.9
       Timeout: 120
