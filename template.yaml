@@ -276,26 +276,6 @@ Resources:
             Path: /coingecko-sol-all
             Method: get
 
-  CoingeckoSolCronFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: coingecko_sol_cron/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable3
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable4
-      Events:
-        SolIndexSchedule:
-          Type: Schedule
-          Properties:
-            Schedule: "cron(0 22 * * ? *)"
-
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
 #    Properties:
