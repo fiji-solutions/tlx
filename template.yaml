@@ -12,8 +12,12 @@ Globals:
     MemorySize: 128
     Environment:
       Variables:
+        # Solindex coins individually
         table: !Ref DynamoDBTable
+        # Solindex indexes individually
         table2: !Ref DynamoDBTable2
+        # Coingecko data
+        table3: !Ref DynamoDBTable3
   Api:
     Cors:
       AllowMethods: "'*'"
@@ -64,6 +68,30 @@ Resources:
             ProjectionType: ALL
 
   DynamoDBTable2:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: "PAY_PER_REQUEST"
+      AttributeDefinitions:
+        - AttributeName: CompositeKey
+          AttributeType: S
+        - AttributeName: IndexName
+          AttributeType: S
+        - AttributeName: Timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: CompositeKey
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: IndexName-Timestamp-Index
+          KeySchema:
+            - AttributeName: IndexName
+              KeyType: HASH
+            - AttributeName: Timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  DynamoDBTable3:
     Type: AWS::DynamoDB::Table
     Properties:
       BillingMode: "PAY_PER_REQUEST"
