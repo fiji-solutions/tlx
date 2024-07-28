@@ -247,7 +247,7 @@ Resources:
         - x86_64
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable4
+            TableName: !Ref DynamoDBTable3
       Events:
         Toros:
           Type: Api

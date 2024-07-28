@@ -21,7 +21,7 @@ def fetch_coins_for_date_range(table_name, start_date, end_date):
 
 
 def fetch_and_process_coins(start_date, end_date, index_start, index_end, exclude_ids):
-    coins_for_date_range = fetch_coins_for_date_range(os.environ["table4"], start_date, end_date)
+    coins_for_date_range = fetch_coins_for_date_range(os.environ["table3"], start_date, end_date)
 
     # Organize data into multiple arrays, one per day
     coins_by_date = defaultdict(list)
