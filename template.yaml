@@ -273,7 +273,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref HelloWorldApi
-            Path: /coingecko-sol
+            Path: /coingecko-sol-all
             Method: get
 
 #  HelloWorldApiStage:
