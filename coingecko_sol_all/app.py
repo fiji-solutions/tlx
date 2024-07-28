@@ -1,10 +1,17 @@
 import json
 import os
+from decimal import Decimal
 
 import boto3
 
 session = boto3.Session()
 dynamodb = session.resource('dynamodb')
+
+
+def decimal_default(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
 
 
 def fetch_all_coins(table_name):
@@ -30,5 +37,5 @@ def lambda_handler(event, context):
             "Access-Control-Allow-Methods": "*",
             "Access-Control-Allow-Origin": "*",
         },
-        'body': json.dumps(items)
+        'body': json.dumps(items, default=decimal_default)
     }
