@@ -236,45 +236,45 @@ Resources:
             Path: /solindex
             Method: get
 
-  CoingeckoSolFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: coingecko_sol/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable3
-      Events:
-        Toros:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HelloWorldApi
-            Path: /coingecko-sol
-            Method: get
-
-  CoingeckoSolAllFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: coingecko_sol_all/
-      Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
-      Architectures:
-        - x86_64
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref DynamoDBTable4
-      Events:
-        Toros:
-          Type: Api
-          Properties:
-            RestApiId: !Ref HelloWorldApi
-            Path: /coingecko-sol-all
-            Method: get
+#  CoingeckoSolFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: coingecko_sol/
+#      Handler: app.lambda_handler
+#      Runtime: python3.9
+#      Timeout: 120
+#      Architectures:
+#        - x86_64
+#      Policies:
+#        - DynamoDBCrudPolicy:
+#            TableName: !Ref DynamoDBTable3
+#      Events:
+#        Toros:
+#          Type: Api
+#          Properties:
+#            RestApiId: !Ref HelloWorldApi
+#            Path: /coingecko-sol
+#            Method: get
+#
+#  CoingeckoSolAllFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: coingecko_sol_all/
+#      Handler: app.lambda_handler
+#      Runtime: python3.9
+#      Timeout: 120
+#      Architectures:
+#        - x86_64
+#      Policies:
+#        - DynamoDBCrudPolicy:
+#            TableName: !Ref DynamoDBTable4
+#      Events:
+#        Toros:
+#          Type: Api
+#          Properties:
+#            RestApiId: !Ref HelloWorldApi
+#            Path: /coingecko-sol-all
+#            Method: get
 
 #  HelloWorldApiStage:
 #    Type: AWS::ApiGateway::Stage
