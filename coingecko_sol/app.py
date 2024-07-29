@@ -19,11 +19,23 @@ def decimal_default(obj):
 
 def fetch_coins_for_date_range(table_name, start_date, end_date):
     table = dynamodb.Table(table_name)
+    items = []
+    last_evaluated_key = None
 
-    response = table.scan(
-        FilterExpression=Attr('Timestamp').between(f"{start_date} 00:00:00+00:00", f"{end_date} 00:00:00+00:00")
-    )
-    items = response['Items']
+    while True:
+        scan_params = {
+            'FilterExpression': Attr('Timestamp').between(f"{start_date} 00:00:00+00:00", f"{end_date} 00:00:00+00:00")
+        }
+        if last_evaluated_key:
+            scan_params['ExclusiveStartKey'] = last_evaluated_key
+
+        response = table.scan(**scan_params)
+        items.extend(response['Items'])
+
+        last_evaluated_key = response.get('LastEvaluatedKey')
+        if not last_evaluated_key:
+            break
+
     return items
 
 
