@@ -26,6 +26,11 @@ Globals:
       AllowHeaders: "'*'"
       AllowOrigin: "'*'"
 
+Parameters:
+  CognitoCustomDomain:
+    Type: String
+    Description: Cognito Custom Domain
+
 Resources:
   HelloWorldApi:
     Type: AWS::Serverless::Api
@@ -235,6 +240,49 @@ Resources:
             RestApiId: !Ref HelloWorldApi
             Path: /solindex
             Method: get
+
+  # ----COGNITO START----
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+      UsernameConfiguration:
+        CaseSensitive: false
+      AutoVerifiedAttributes:
+        - email
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - http://localhost:3000
+        - https://tlx.fijisolutions.net/login
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthScopes:
+        - phone
+        - email
+        - openid
+        - profile
+      SupportedIdentityProviders:
+        - COGNITO
+  UserPoolGroupAdmin:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: admin
+      Precedence: 100
+      UserPoolId: !Ref UserPool
+  UserPoolGroupClient:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: client
+      Precedence: 200
+      UserPoolId: !Ref UserPool
+  # ----COGNITO START----
 
 #  CoingeckoSolFunction:
 #    Type: AWS::Serverless::Function
