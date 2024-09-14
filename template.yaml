@@ -26,6 +26,11 @@ Globals:
       AllowHeaders: "'*'"
       AllowOrigin: "'*'"
 
+Parameters:
+  CognitoCustomDomain:
+    Type: String
+    Description: Cognito Custom Domain
+
 Resources:
   HelloWorldApi:
     Type: AWS::Serverless::Api
@@ -265,6 +270,11 @@ Resources:
         - profile
       SupportedIdentityProviders:
         - COGNITO
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub ${CognitoCustomDomain}
+      UserPoolId: !Ref UserPool
   UserPoolGroupAdmin:
     Type: AWS::Cognito::UserPoolGroup
     Properties:
