@@ -26,11 +26,6 @@ Globals:
       AllowHeaders: "'*'"
       AllowOrigin: "'*'"
 
-Parameters:
-  CognitoCustomDomain:
-    Type: String
-    Description: Cognito Custom Domain
-
 Resources:
   HelloWorldApi:
     Type: AWS::Serverless::Api
