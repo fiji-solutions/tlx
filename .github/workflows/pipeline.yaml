@@ -105,8 +105,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides \
-          CognitoCustomDomain=staging-cognito
+            --parameter-overrides CognitoCustomDomain=staging-cognito
 
   build-and-package:
     if: github.ref == 'refs/heads/main'
@@ -200,8 +199,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides \
-          CognitoCustomDomain=staging-cognito
+            --parameter-overrides CognitoCustomDomain=staging-cognito
 
   integration-test:
     if: github.ref == 'refs/heads/main'
@@ -248,5 +246,4 @@ jobs:
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides \
-          CognitoCustomDomain=cognito
+            --parameter-overrides CognitoCustomDomain=cognito
