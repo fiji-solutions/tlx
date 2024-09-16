@@ -254,8 +254,8 @@ Resources:
         - email
       Schema:
         - AttributeDataType: String
-          DeveloperOnlyAttribute: true
-          Mutable: true
+          DeveloperOnlyAttribute: false
+          Mutable: false
           Name: fullName
           Required: false
   UserPoolClient:
