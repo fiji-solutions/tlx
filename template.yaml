@@ -252,6 +252,12 @@ Resources:
         CaseSensitive: false
       AutoVerifiedAttributes:
         - email
+  Schema:
+    - AttributeDataType: String
+      DeveloperOnlyAttribute: true
+      Mutable: true
+      Name: fullName
+      Required: false
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
