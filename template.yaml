@@ -254,6 +254,11 @@ Resources:
         - email
       Schema:
         - AttributeDataType: String
+          DeveloperOnlyAttribute: true
+          Mutable: true
+          Name: fullName
+          Required: false
+        - AttributeDataType: String
           DeveloperOnlyAttribute: false
           Mutable: false
           Name: fullName
