@@ -28,6 +28,8 @@ class TorosCoins(Enum):
     STETH3X = "0x15e2f06138aed58ca2a6afb5a1333bbc5f728f80"
     STETH4X = "0xba5f6a0d2ac21a3fec7a6c40facd23407aa84663"
 
+    SUI2XOPT = "0x1bae4efc60269fe66ecec7252825d6a0250a02ee"
+
 
 class Intervals(Enum):
     h = "1h"
