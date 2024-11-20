@@ -28,6 +28,8 @@ class TorosCoins(Enum):
 
     SUI2XOPT = "0x1bae4efc60269fe66ecec7252825d6a0250a02ee"
 
+    DOGE2XOPT = "0x49bdb78f48db6e0ced4d4475b6d2047539df1412"
+
 
 class Intervals(Enum):
     h = "1h"
