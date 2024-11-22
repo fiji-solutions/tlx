@@ -255,7 +255,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref HelloWorldApi
-            Path: /btc
+            Path: /spot
             Method: get
 
   # ----COGNITO START----

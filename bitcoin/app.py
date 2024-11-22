@@ -5,8 +5,8 @@ import pandas as pd
 import requests
 
 
-def get_btc_data(from_date: str, to_date: str):
-    url = "http://staging.api.catalytics.pro/v1/coingecko/btc/open"
+def get_btc_data(from_date: str, to_date: str, asset: str):
+    url = "http://staging.api.catalytics.pro/v1/coingecko/" + asset + "/open"
     response = requests.get(url).json()
 
     date_to_threshold = datetime.strptime(to_date, "%Y-%m-%d")
@@ -87,7 +87,8 @@ def get_simple_omega_ratio(df, threshold=0):
 def lambda_handler(event, context):
     data = get_btc_data(
         event["queryStringParameters"]["fromDate"],
-        event["queryStringParameters"]["toDate"]
+        event["queryStringParameters"]["toDate"],
+        event["queryStringParameters"]["asset"]
     )
     df = get_data_df(data, int(event["queryStringParameters"]["initialInvestment"]))
 
