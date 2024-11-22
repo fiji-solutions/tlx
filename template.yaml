@@ -241,6 +241,23 @@ Resources:
             Path: /solindex
             Method: get
 
+  BtcFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bitcoin/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 120
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HelloWorldApi
+            Path: /btc
+            Method: get
+
   # ----COGNITO START----
   UserPool:
     Type: AWS::Cognito::UserPool
