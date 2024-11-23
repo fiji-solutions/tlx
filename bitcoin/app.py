@@ -6,18 +6,25 @@ import requests
 
 
 def get_btc_data(from_date: str, to_date: str, asset: str):
-    url = "https://api.catalytics.pro/v1/coingecko/" + asset + "/open"
+    base_asset, leverage = asset.split('-')
+    leverage = int(leverage)
+
+    url = f"https://api.catalytics.pro/v1/coingecko/{base_asset}/open"
     response = requests.get(url).json()
 
     date_to_threshold = datetime.strptime(to_date, "%Y-%m-%d")
 
-    # Filter data based on the date range
     filtered_data = [
         {"timestamp": entry["date"], "price": entry["price"]}
         for entry in response
         if datetime.strptime(entry["date"], "%Y-%m-%d") >= datetime.strptime(from_date, "%Y-%m-%d")
         and datetime.strptime(entry["date"], "%Y-%m-%d") <= date_to_threshold
     ]
+
+    if leverage > 1:
+        base_price = filtered_data[0]["price"]
+        for entry in filtered_data:
+            entry["price"] = base_price + leverage * (entry["price"] - base_price)
 
     return filtered_data
 
