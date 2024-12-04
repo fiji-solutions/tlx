@@ -336,7 +336,44 @@ def lambda_handler(event, context):
                         },
                     ]
                 },
+                {
+                    "proposalId": "xMLsw7zzBfRXNiQQo42aUohRsibgrmWcPt2mD8HdUUr",
+                    "proposalName": "J4J #3: Jupuary Vote 2",
+                    "startDate": "2024-12-04T04:00:00.000000",
+                    "endDate": "2024-12-08T04:00:00.000000",
+                    "proposalChoices": [
+                        {
+                            "side": 1,
+                            "name": "Yes, I am comfortable with this proposal.",
+                            "title": "Yes"
+                        },
+                        {
+                            "side": 2,
+                            "name": "No, I am not comfortable with this proposal.",
+                            "title": "No"
+                        },
+                    ]
+                },
             ],
-            "activeProposal": [],
+            "activeProposal": [
+                {
+                    "proposalId": "xMLsw7zzBfRXNiQQo42aUohRsibgrmWcPt2mD8HdUUr",
+                    "proposalName": "J4J #3: Jupuary Vote 2",
+                    "startDate": "2024-12-04T04:00:00.000000",
+                    "endDate": "2024-12-08T04:00:00.000000",
+                    "proposalChoices": [
+                        {
+                            "side": 1,
+                            "name": "Yes, I am comfortable with this proposal.",
+                            "title": "Yes"
+                        },
+                        {
+                            "side": 2,
+                            "name": "No, I am not comfortable with this proposal.",
+                            "title": "No"
+                        },
+                    ]
+                },
+            ],
         }),
     }
