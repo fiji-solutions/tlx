@@ -325,14 +325,18 @@ def lambda_handler(event, context):
                 {
                     "proposalId": "CWAwYcLmniqQYnzDh3QGRH6FtymBesJ9dzk1EBvYNBwK",
                     "proposalName": "J4J #3: Jupuary Vote 1",
+                    "startDate": "2024-11-25T16:00:00.000000",
+                    "endDate": "2024-11-29T16:00:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
-                            "name": "Yes, I am comfortable with this proposal."
+                            "name": "Yes, I am comfortable with this proposal.",
+                            "title": "Yes"
                         },
                         {
                             "side": 2,
-                            "name": "No, I am not comfortable with this proposal."
+                            "name": "No, I am not comfortable with this proposal.",
+                            "title": "No"
                         },
                     ]
                 },
