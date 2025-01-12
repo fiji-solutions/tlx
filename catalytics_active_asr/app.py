@@ -13,8 +13,11 @@ def lambda_handler(event, context):
         "body": json.dumps({
             "proposal": [
                 {
+                    "asrId": "1",
                     "proposalId": "CqMsFvvmzETwwa2tXMZ75aNvjc5xy7VamxYC5u7v1ScA",
                     "proposalName": "Which animal is the cutest?",
+                    "startDate": "2024-03-05T15:50:00.000000",
+                    "endDate": "2024-03-07T15:50:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -35,8 +38,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "6txWyf3guJrhnNJXcAHxnV2oVxBcvebuSbfYsgB3yUKc",
                     "proposalName": "Round #1 of LFG Voting!",
+                    "startDate": "2024-03-07T16:00:00.000000",
+                    "endDate": "2024-03-10T16:00:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -65,8 +71,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "5N9UbMGzga3SL8Rq7qDZCGfZX3FRDUhgqkSY2ksQjg8r",
                     "proposalName": "Proposal: Core Working Group Budget",
+                    "startDate": "2024-03-29T16:03:00.000000",
+                    "endDate": "2024-04-01T17:03:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -83,8 +92,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "2c2Yg1E9BNQVxqg9ZpB2CTBa4GGT8CoeWH6JN7ZQ5FDw",
                     "proposalName": "Round #2 of LFG Voting",
+                    "startDate": "2024-04-17T18:00:00.000000",
+                    "endDate": "2024-04-20T18:00:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -113,8 +125,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "A37zp1811aYLd7uoXN78KG12csC9dycyJcK7dD3R22zo",
                     "proposalName": "Trial Budget: Web Working Group",
+                    "startDate": "2024-05-02T16:00:00.000000",
+                    "endDate": "2024-05-05T16:00:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -131,8 +146,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "DhJAwGDtHYdEy8mBoeZ3Yub5potxRJbvzycYUwhFGfox",
                     "proposalName": "Trial Budget: Catdet Working Group",
+                    "startDate": "2024-05-02T16:00:00.000000",
+                    "endDate": "2024-05-05T16:00:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -149,8 +167,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "5QTT1AFSMA76dNUFYETiEAo54q3vKvGc8WexTGjamHDN",
                     "proposalName": "Trial Budget: Reddit Working Group",
+                    "startDate": "2024-05-02T16:01:00.000000",
+                    "endDate": "2024-05-05T16:01:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -167,8 +188,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "GiPupbvjySF8XQr7NPk8z3HhLkkreuZ7pdDqcyaSWMXN",
                     "proposalName": "Round #3 of LFG Voting",
+                    "startDate": "2024-05-22T18:03:00.000000",
+                    "endDate": "2024-05-25T18:03:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -185,8 +209,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "1",
                     "proposalId": "CioyJmzFuRbN3Pda1LhvNxsEDoA4gQfTJ56F2hgWib5C",
                     "proposalName": "Proposal: Uplink Working Group Budget",
+                    "startDate": "2024-06-16T16:31:00.000000",
+                    "endDate": "2024-06-19T16:31:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -203,8 +230,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "2",
                     "proposalId": "CnzPx1KQu1SFvGJHpZ4ykNkmfHSLBKx1oVESyjb5CjYC",
                     "proposalName": "J4J #1: Supply Reduction Proposal",
+                    "startDate": "2024-08-01T16:16:00.000000",
+                    "endDate": "2024-08-04T16:16:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -221,8 +251,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "2",
                     "proposalId": "CudfcXyY6JWKFkZxHMLv9ZvJuzBat4UvTx6anzW33TvM",
                     "proposalName": "Jupiter DAO: Microgrants Proposal",
+                    "startDate": "2024-08-23T17:00:00.000000",
+                    "endDate": "2024-08-27T17:00:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -239,8 +272,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "2",
                     "proposalId": "ApKpFDzwsjMEpW4zPNpmsHyPGfKrjaY6rA9HTLwV5a1w",
                     "proposalName": "Trial Budget: Jup & Juice WG (JJWG)",
+                    "startDate": "2024-09-09T16:30:00.000000",
+                    "endDate": "2024-09-12T16:30:00.000000",
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -257,8 +293,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "2",
                     "proposalId": "5G3ut22wiUWAoSnHCNTHus8LJTcnUaJKzjH1j1vLvoKs",
                     "proposalName": "J4J #2: Utilize Excess Jupuary for ASR",
+                    "startDate": "2024-09-27T16:30:00.000000",
+                    "endDate": "2024-10-01T16:30:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -275,8 +314,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "3",
                     "proposalId": "PJVgLKqBa5LabApp9uU5rvxUgqp4RdUfBxVbEddLxWa",
                     "proposalName": "Proposal: Increase Quorum for Jupiter DAO",
+                    "startDate": "2024-10-25T16:31:00.000000",
+                    "endDate": "2024-10-29T15:31:00.000000",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -293,8 +335,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "3",
                     "proposalId": "ByQ21v3hqdQVwPHsfwurrtEAH8pB3DYuLdp9jU2Hwnd4",
                     "proposalName": "JUP Mobile Background Vote",
+                    "startDate": "2024-11-16T15:59:59.999999",
+                    "endDate": "2024-11-20T15:59:59.999999",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -323,10 +368,11 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "3",
                     "proposalId": "CWAwYcLmniqQYnzDh3QGRH6FtymBesJ9dzk1EBvYNBwK",
                     "proposalName": "J4J #3: Jupuary Vote 1",
-                    "startDate": "2024-11-25T16:00:00.000000",
-                    "endDate": "2024-11-29T16:00:00.000000",
+                    "startDate": "2024-11-25T15:59:59.999999",
+                    "endDate": "2024-11-29T15:59:59.999999",
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -341,6 +387,7 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
+                    "asrId": "3",
                     "proposalId": "xMLsw7zzBfRXNiQQo42aUohRsibgrmWcPt2mD8HdUUr",
                     "proposalName": "J4J #3: Jupuary Vote 2",
                     "startDate": "2024-12-04T04:00:00.000000",
@@ -360,5 +407,81 @@ def lambda_handler(event, context):
                 },
             ],
             "activeProposal": [],
+            "asrs": [{
+                "id": "1",
+                "period": "March - June 2024",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                        },
+                        {
+                            "name": "Zeus",
+                            "symbol": "ZEUS1aR7aX8DFFJf5QjWj2ftDDdNTroMNGo8YoQm3Gq",
+                            "value": 7500000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/ZEUS.webp",
+                        },
+                        {
+                            "name": "WEN",
+                            "symbol": "WENWENvqqNya429ubCdR81ZmD69brwQaaBYY6p3LCpk",
+                            "value": 7500000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/WEN.webp",
+                        },
+                        {
+                            "name": "UPT",
+                            "symbol": "UPTx1d24aBWuRgwxVnFmX4gNraj3QGFzL3QqBgxtWQG",
+                            "value": 7500000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/UPT.webp",
+                        },
+                        {
+                            "name": "Shark",
+                            "symbol": "SHARKSYJjqaNyxVfrpnBN9pjgkhwDhatnMyicWPnr1s",
+                            "value": 750000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/SHARK.webp",
+                        },
+                    ]
+                }
+            }, {
+                "id": "2",
+                "period": "July - September 2024",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                        },
+                        {
+                            "name": "Cloud",
+                            "symbol": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
+                            "value": 7500000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/CLOUD.webp",
+                        },
+                    ]
+                }
+            }, {
+                "id": "3",
+                "period": "October - December 2024",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                        },
+                        {
+                            "name": "deBridge",
+                            "symbol": "DBRiDgJAMsM95moTzJs7M9LnkGErpbv9v6CUR1DXnUu5",
+                            "value": 75000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/DBR.webp",
+                        },
+                    ]
+                }
+            }]
         }),
     }
