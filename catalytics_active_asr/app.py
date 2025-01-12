@@ -431,7 +431,7 @@ def lambda_handler(event, context):
                     "totalAsrRewards": [
                         {
                             "name": "Staked Jupiter",
-                            "symbol": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                            "symbol": "JUP",
                             "value": 50000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
@@ -448,7 +448,7 @@ def lambda_handler(event, context):
                         },
                         {
                             "name": "Zeus",
-                            "symbol": "ZEUS1aR7aX8DFFJf5QjWj2ftDDdNTroMNGo8YoQm3Gq",
+                            "symbol": "ZEUS",
                             "value": 7500000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/ZEUS.webp",
                             "logic": {
@@ -465,7 +465,7 @@ def lambda_handler(event, context):
                         },
                         {
                             "name": "WEN",
-                            "symbol": "WENWENvqqNya429ubCdR81ZmD69brwQaaBYY6p3LCpk",
+                            "symbol": "WEN",
                             "value": 7500000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/WEN.webp",
                             "logic": {
@@ -482,7 +482,7 @@ def lambda_handler(event, context):
                         },
                         {
                             "name": "UPT",
-                            "symbol": "UPTx1d24aBWuRgwxVnFmX4gNraj3QGFzL3QqBgxtWQG",
+                            "symbol": "UPT",
                             "value": 7500000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/UPT.webp",
                             "logic": {
@@ -499,7 +499,7 @@ def lambda_handler(event, context):
                         },
                         {
                             "name": "Shark",
-                            "symbol": "SHARKSYJjqaNyxVfrpnBN9pjgkhwDhatnMyicWPnr1s",
+                            "symbol": "SHARK",
                             "value": 750000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/SHARK.webp",
                             "logic": {
@@ -523,7 +523,7 @@ def lambda_handler(event, context):
                     "totalAsrRewards": [
                         {
                             "name": "Staked Jupiter",
-                            "symbol": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                            "symbol": "JUP",
                             "value": 50000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
@@ -536,7 +536,7 @@ def lambda_handler(event, context):
                         },
                         {
                             "name": "Cloud",
-                            "symbol": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
+                            "symbol": "CLOUD",
                             "value": 7500000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/CLOUD.webp",
                             "logic": {
@@ -556,7 +556,7 @@ def lambda_handler(event, context):
                     "totalAsrRewards": [
                         {
                             "name": "Staked Jupiter",
-                            "symbol": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+                            "symbol": "JUP",
                             "value": 50000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
@@ -568,7 +568,7 @@ def lambda_handler(event, context):
                         },
                         {
                             "name": "deBridge",
-                            "symbol": "DBRiDgJAMsM95moTzJs7M9LnkGErpbv9v6CUR1DXnUu5",
+                            "symbol": "DBR",
                             "value": 75000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/DBR.webp",
                             "logic": {
