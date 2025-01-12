@@ -78,7 +78,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: Core Working Group Budget",
                     "startDate": "2024-03-29T16:03:00.000000",
                     "endDate": "2024-04-01T17:03:00.000000",
-                    "totalVotes": 198987006,
+                    "totalVotes": 198987007,
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -100,7 +100,7 @@ def lambda_handler(event, context):
                     "proposalName": "Round #2 of LFG Voting",
                     "startDate": "2024-04-17T18:00:00.000000",
                     "endDate": "2024-04-20T18:00:00.000000",
-                    "totalVotes": 230849742,
+                    "totalVotes": 230849743,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -134,7 +134,7 @@ def lambda_handler(event, context):
                     "proposalName": "Trial Budget: Web Working Group",
                     "startDate": "2024-05-02T16:00:00.000000",
                     "endDate": "2024-05-05T16:00:00.000000",
-                    "totalVotes": 189310210,
+                    "totalVotes": 189310211,
                     "proposalChoices": [
                         {
                             "side": 0,
@@ -200,7 +200,7 @@ def lambda_handler(event, context):
                     "proposalName": "Round #3 of LFG Voting",
                     "startDate": "2024-05-22T18:03:00.000000",
                     "endDate": "2024-05-25T18:03:00.000000",
-                    "totalVotes": 217498625,
+                    "totalVotes": 217498626,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -222,7 +222,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: Uplink Working Group Budget",
                     "startDate": "2024-06-16T16:31:00.000000",
                     "endDate": "2024-06-19T16:31:00.000000",
-                    "totalVotes": 177958477,
+                    "totalVotes": 177958478,
                     "proposalChoices": [
                         {
                             "side": 0,
