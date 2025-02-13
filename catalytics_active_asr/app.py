@@ -352,8 +352,8 @@ def lambda_handler(event, context):
                     "asrId": "3",
                     "proposalId": "ByQ21v3hqdQVwPHsfwurrtEAH8pB3DYuLdp9jU2Hwnd4",
                     "proposalName": "JUP Mobile Background Vote",
-                    "startDate": "2024-11-16T15:59:59.999999",
-                    "endDate": "2024-11-20T15:59:59.999999",
+                    "startDate": 1731772799,
+                    "endDate": 1732118399,
                     "totalVotes": 362217046,
                     "proposalChoices": [
                         {
@@ -386,8 +386,8 @@ def lambda_handler(event, context):
                     "asrId": "3",
                     "proposalId": "CWAwYcLmniqQYnzDh3QGRH6FtymBesJ9dzk1EBvYNBwK",
                     "proposalName": "J4J #3: Jupuary Vote 1",
-                    "startDate": "2024-11-25T15:59:59.999999",
-                    "endDate": "2024-11-29T15:59:59.999999",
+                    "startDate": 1732550399,
+                    "endDate": 1732895999,
                     "totalVotes": 364576672,
                     "proposalChoices": [
                         {
@@ -406,8 +406,8 @@ def lambda_handler(event, context):
                     "asrId": "3",
                     "proposalId": "xMLsw7zzBfRXNiQQo42aUohRsibgrmWcPt2mD8HdUUr",
                     "proposalName": "J4J #3: Jupuary Vote 2",
-                    "startDate": "2024-12-04T04:00:00.000000",
-                    "endDate": "2024-12-08T04:00:00.000000",
+                    "startDate": 1733284800,
+                    "endDate": 1733630400, # 1740067199
                     "totalVotes": 360223503,
                     "proposalChoices": [
                         {
@@ -572,6 +572,7 @@ def lambda_handler(event, context):
                             "value": 75000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/DBR.webp",
                             "logic": {
+                                "GiPupbvjySF8XQr7NPk8z3HhLkkreuZ7pdDqcyaSWMXN": 1.0,
                                 "PJVgLKqBa5LabApp9uU5rvxUgqp4RdUfBxVbEddLxWa": 1.0,
                                 "ByQ21v3hqdQVwPHsfwurrtEAH8pB3DYuLdp9jU2Hwnd4": 1.0,
                                 "CWAwYcLmniqQYnzDh3QGRH6FtymBesJ9dzk1EBvYNBwK": 1.0,
