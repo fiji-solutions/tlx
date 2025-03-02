@@ -423,12 +423,12 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
-                    "asrId": "0",
+                    "asrId": "4",
                     "proposalId": "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k",
                     "proposalName": "Proposal: Update Jupiter Logo",
                     "startDate": 1740584520,
                     "endDate": 1740930120,
-                    "totalVotes": 0,
+                    "totalVotes": 453175767,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -445,12 +445,12 @@ def lambda_handler(event, context):
             ],
             "activeProposal": [
                 {
-                    "asrId": "0",
+                    "asrId": "4",
                     "proposalId": "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k",
                     "proposalName": "Proposal: Update Jupiter Logo",
                     "startDate": 1740584520,
                     "endDate": 1740930120,
-                    "totalVotes": 0,
+                    "totalVotes": 453175767,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -617,6 +617,22 @@ def lambda_handler(event, context):
                                 "ByQ21v3hqdQVwPHsfwurrtEAH8pB3DYuLdp9jU2Hwnd4": 1.0,
                                 "CWAwYcLmniqQYnzDh3QGRH6FtymBesJ9dzk1EBvYNBwK": 1.0,
                                 "xMLsw7zzBfRXNiQQo42aUohRsibgrmWcPt2mD8HdUUr": 1.0,
+                            },
+                        },
+                    ]
+                }
+            }, {
+                "id": "4",
+                "period": "January - March 2025",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUP",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                            "logic": {
+                                "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k": 1.0,
                             },
                         },
                     ]
