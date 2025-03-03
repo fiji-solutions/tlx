@@ -443,27 +443,7 @@ def lambda_handler(event, context):
                     ]
                 },
             ],
-            "activeProposal": [
-                {
-                    "asrId": "4",
-                    "proposalId": "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k",
-                    "proposalName": "Proposal: Update Jupiter Logo",
-                    "startDate": 1740584520,
-                    "endDate": 1740930120,
-                    "totalVotes": 453175767,
-                    "proposalChoices": [
-                        {
-                            "side": 1,
-                            "name": "Yes: Update the new logo to the Catstanbul themed logo.",
-                            "title": "Yes"
-                        },
-                        {
-                            "side": 2,
-                            "name": "No: Maintain the existing logo, and revisit this later.",
-                            "title": "No"
-                        },
-                    ]
-                }],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
