@@ -664,6 +664,7 @@ def lambda_handler(event, context):
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
                                 "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k": 1.0,
+                                "DZ31es2JWLmTBS69ex7FcMfUrCh2LFRo4jqDNcZuoGV7": 1.0,
                             },
                         },
                     ]
