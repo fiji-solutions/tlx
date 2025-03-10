@@ -448,7 +448,7 @@ def lambda_handler(event, context):
                     "proposalName": "Meow's 2030 Lock-in",
                     "startDate": 1741282080,
                     "endDate": 1741627680,
-                    "totalVotes": 0,
+                    "totalVotes": 488751779,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -475,7 +475,7 @@ def lambda_handler(event, context):
                     "proposalName": "Meow's 2030 Lock-in",
                     "startDate": 1741282080,
                     "endDate": 1741627680,
-                    "totalVotes": 0,
+                    "totalVotes": 488751779,
                     "proposalChoices": [
                         {
                             "side": 1,
