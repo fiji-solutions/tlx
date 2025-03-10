@@ -443,7 +443,7 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
-                    "asrId": "0",
+                    "asrId": "4",
                     "proposalId": "DZ31es2JWLmTBS69ex7FcMfUrCh2LFRo4jqDNcZuoGV7",
                     "proposalName": "Meow's 2030 Lock-in",
                     "startDate": 1741282080,
@@ -470,7 +470,7 @@ def lambda_handler(event, context):
             ],
             "activeProposal": [
                 {
-                    "asrId": "0",
+                    "asrId": "4",
                     "proposalId": "DZ31es2JWLmTBS69ex7FcMfUrCh2LFRo4jqDNcZuoGV7",
                     "proposalName": "Meow's 2030 Lock-in",
                     "startDate": 1741282080,
