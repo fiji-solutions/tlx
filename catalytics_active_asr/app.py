@@ -468,33 +468,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "4",
-                    "proposalId": "DZ31es2JWLmTBS69ex7FcMfUrCh2LFRo4jqDNcZuoGV7",
-                    "proposalName": "Meow's 2030 Lock-in",
-                    "startDate": 1741282080,
-                    "endDate": 1741627680,
-                    "totalVotes": 488751779,
-                    "proposalChoices": [
-                        {
-                            "side": 1,
-                            "name": "Yes, meow fronts the 280M JUP and locks in until 2030 in return for a 220M JUP bonus.",
-                            "title": "Yes"
-                        },
-                        {
-                            "side": 2,
-                            "name": "No, the 280M JUP comes from the team's strategic reserve and meow’s JUP unlocks in June 2026 as planned.",
-                            "title": "No"
-                        },
-                        {
-                            "side": 3,
-                            "name": "Abstain",
-                            "title": "Abstain"
-                        },
-                    ]
-                }
-            ],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
