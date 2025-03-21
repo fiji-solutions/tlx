@@ -473,7 +473,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: Catdets Working Group Budget",
                     "startDate": 1742225580,
                     "endDate": 1742571180,
-                    "totalVotes": 442785646,
+                    "totalVotes": 442834882,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -500,7 +500,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: Catdets Working Group Budget",
                     "startDate": 1742225580,
                     "endDate": 1742571180,
-                    "totalVotes": 442785646,
+                    "totalVotes": 442834882,
                     "proposalChoices": [
                         {
                             "side": 2,
