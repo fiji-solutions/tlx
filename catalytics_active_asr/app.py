@@ -689,6 +689,7 @@ def lambda_handler(event, context):
                             "logic": {
                                 "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k": 1.0,
                                 "DZ31es2JWLmTBS69ex7FcMfUrCh2LFRo4jqDNcZuoGV7": 1.0,
+                                "DEiRPxWLjDFrC2AUrR7KZfjTCRiN4W2pd2SV1L1GkotK": 1.0,
                             },
                         },
                     ]
