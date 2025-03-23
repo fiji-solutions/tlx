@@ -493,32 +493,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "4",
-                    "proposalId": "DEiRPxWLjDFrC2AUrR7KZfjTCRiN4W2pd2SV1L1GkotK",
-                    "proposalName": "Proposal: Catdets Working Group Budget",
-                    "startDate": 1742225580,
-                    "endDate": 1742571180,
-                    "totalVotes": 442834882,
-                    "proposalChoices": [
-                        {
-                            "side": 2,
-                            "name": "I vote for this proposal.",
-                            "title": "For"
-                        },
-                        {
-                            "side": 1,
-                            "name": "I vote against this proposal.",
-                            "title": "Against"
-                        },
-                        {
-                            "side": 0,
-                            "name": "I abstain from this proposal.",
-                            "title": "Abstain"
-                        },
-                    ]
-                }],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
