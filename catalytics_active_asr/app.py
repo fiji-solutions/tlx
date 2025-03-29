@@ -491,9 +491,109 @@ def lambda_handler(event, context):
                             "title": "Abstain"
                         },
                     ]
+                },
+                {
+                    "asrId": "4",
+                    "proposalId": "E9kHNdMuF8GSekZEZMqnYc8hXxRdoksSuffhdCBYsJcb",
+                    "proposalName": "Trial Budget: Design & Art WG (DAWG)",
+                    "startDate": 1743262140,
+                    "endDate": 1743607740,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 2,
+                            "name": "I vote for this proposal.",
+                            "title": "For"
+                        },
+                        {
+                            "side": 1,
+                            "name": "I vote against this proposal.",
+                            "title": "Against"
+                        },
+                        {
+                            "side": 0,
+                            "name": "I abstain from this proposal.",
+                            "title": "Abstain"
+                        },
+                    ]
+                },
+                {
+                    "asrId": "4",
+                    "proposalId": "A3MdKWdsVH2haFb7nDtb2ALVwpvdUe4QRjT37Y8GBjQ3",
+                    "proposalName": "Trial Budget: DevRel WG (DRWG)",
+                    "startDate": 1743262140,
+                    "endDate": 1743607740,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 2,
+                            "name": "I vote for this proposal.",
+                            "title": "For"
+                        },
+                        {
+                            "side": 1,
+                            "name": "I vote against this proposal.",
+                            "title": "Against"
+                        },
+                        {
+                            "side": 0,
+                            "name": "I abstain from this proposal.",
+                            "title": "Abstain"
+                        },
+                    ]
                 }
             ],
-            "activeProposal": [],
+            "activeProposal": [
+                {
+                    "asrId": "4",
+                    "proposalId": "A3MdKWdsVH2haFb7nDtb2ALVwpvdUe4QRjT37Y8GBjQ3",
+                    "proposalName": "Trial Budget: DevRel WG (DRWG)",
+                    "startDate": 1743262140,
+                    "endDate": 1743607740,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 2,
+                            "name": "I vote for this proposal.",
+                            "title": "For"
+                        },
+                        {
+                            "side": 1,
+                            "name": "I vote against this proposal.",
+                            "title": "Against"
+                        },
+                        {
+                            "side": 0,
+                            "name": "I abstain from this proposal.",
+                            "title": "Abstain"
+                        },
+                    ]
+                },
+                {
+                    "asrId": "4",
+                    "proposalId": "E9kHNdMuF8GSekZEZMqnYc8hXxRdoksSuffhdCBYsJcb",
+                    "proposalName": "Trial Budget: Design & Art WG (DAWG)",
+                    "startDate": 1743262140,
+                    "endDate": 1743607740,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 2,
+                            "name": "I vote for this proposal.",
+                            "title": "For"
+                        },
+                        {
+                            "side": 1,
+                            "name": "I vote against this proposal.",
+                            "title": "Against"
+                        },
+                        {
+                            "side": 0,
+                            "name": "I abstain from this proposal.",
+                            "title": "Abstain"
+                        },
+                    ]
+                }],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
