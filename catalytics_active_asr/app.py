@@ -498,7 +498,7 @@ def lambda_handler(event, context):
                     "proposalName": "Trial Budget: Design & Art WG (DAWG)",
                     "startDate": 1743262140,
                     "endDate": 1743607740,
-                    "totalVotes": 0,
+                    "totalVotes": 492442050,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -523,7 +523,7 @@ def lambda_handler(event, context):
                     "proposalName": "Trial Budget: DevRel WG (DRWG)",
                     "startDate": 1743262140,
                     "endDate": 1743607740,
-                    "totalVotes": 0,
+                    "totalVotes": 497480728,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -550,7 +550,7 @@ def lambda_handler(event, context):
                     "proposalName": "Trial Budget: DevRel WG (DRWG)",
                     "startDate": 1743262140,
                     "endDate": 1743607740,
-                    "totalVotes": 0,
+                    "totalVotes": 497480728,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -575,7 +575,7 @@ def lambda_handler(event, context):
                     "proposalName": "Trial Budget: Design & Art WG (DAWG)",
                     "startDate": 1743262140,
                     "endDate": 1743607740,
-                    "totalVotes": 0,
+                    "totalVotes": 492442050,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -765,6 +765,8 @@ def lambda_handler(event, context):
                                 "8DA1TFPjbyfJXmQMrqRcQCGheoordFZ2fWNd3zpEhj2k": 1.0,
                                 "DZ31es2JWLmTBS69ex7FcMfUrCh2LFRo4jqDNcZuoGV7": 1.0,
                                 "DEiRPxWLjDFrC2AUrR7KZfjTCRiN4W2pd2SV1L1GkotK": 1.0,
+                                "E9kHNdMuF8GSekZEZMqnYc8hXxRdoksSuffhdCBYsJcb": 0.5,
+                                "A3MdKWdsVH2haFb7nDtb2ALVwpvdUe4QRjT37Y8GBjQ3": 0.5,
                             },
                         },
                     ]
