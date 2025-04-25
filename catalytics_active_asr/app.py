@@ -570,7 +570,7 @@ def lambda_handler(event, context):
             ],
             "activeProposal": [
                 {
-                    "asrId": "0",
+                    "asrId": "5",
                     "proposalId": "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo",
                     "proposalName": "Proposal: DAO Resolution",
                     "startDate": 1745425740,
