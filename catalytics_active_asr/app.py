@@ -543,7 +543,7 @@ def lambda_handler(event, context):
                     ]
                 },
                 {
-                    "asrId": "0",
+                    "asrId": "5",
                     "proposalId": "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo",
                     "proposalName": "Proposal: DAO Resolution",
                     "startDate": 1745425740,
@@ -782,7 +782,6 @@ def lambda_handler(event, context):
                             "value": 50000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
-                                "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo": 0
                             },
                         },
                     ]
