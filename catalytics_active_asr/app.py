@@ -771,6 +771,21 @@ def lambda_handler(event, context):
                         },
                     ]
                 }
+            }, {
+                "id": "5",
+                "period": "April - June 2025",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUP",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                            "logic": {
+                            },
+                        },
+                    ]
+                }
             }]
         }),
     }
