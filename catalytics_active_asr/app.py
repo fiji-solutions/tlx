@@ -548,7 +548,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: DAO Resolution",
                     "startDate": 1745425740,
                     "endDate": 1745771340,
-                    "totalVotes": 0,
+                    "totalVotes": 496236622,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -575,7 +575,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: DAO Resolution",
                     "startDate": 1745425740,
                     "endDate": 1745771340,
-                    "totalVotes": 0,
+                    "totalVotes": 496236622,
                     "proposalChoices": [
                         {
                             "side": 2,
