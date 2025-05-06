@@ -568,32 +568,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "5",
-                    "proposalId": "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo",
-                    "proposalName": "Proposal: DAO Resolution",
-                    "startDate": 1745425740,
-                    "endDate": 1745771340,
-                    "totalVotes": 496236622,
-                    "proposalChoices": [
-                        {
-                            "side": 2,
-                            "name": "I vote for this proposal.",
-                            "title": "For"
-                        },
-                        {
-                            "side": 1,
-                            "name": "I vote against this proposal.",
-                            "title": "Against"
-                        },
-                        {
-                            "side": 0,
-                            "name": "I abstain from this proposal.",
-                            "title": "Abstain"
-                        },
-                    ]
-                }],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
