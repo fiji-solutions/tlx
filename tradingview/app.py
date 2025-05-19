@@ -2,9 +2,11 @@ import json
 import requests
 import base64
 
-
 DISCORD_BOT_TOKEN = ""
 CHANNEL_ID = ""
+
+USER_TAGS = "<@217278463889899522> <@363658083211149313>"
+
 
 def send_discord_message(channel_id, message, token):
     url = f"https://discord.com/api/v10/channels/{channel_id}/messages"
@@ -17,6 +19,7 @@ def send_discord_message(channel_id, message, token):
     }
     response = requests.post(url, headers=headers, json=payload)
     response.raise_for_status()
+
 
 def lambda_handler(event, context):
     try:
@@ -40,7 +43,9 @@ def lambda_handler(event, context):
                 "body": json.dumps({"error": "Message is empty."})
             }
 
-        send_discord_message(CHANNEL_ID, message, DISCORD_BOT_TOKEN)
+        full_message = f"{message}\n\n{USER_TAGS}"
+
+        send_discord_message(CHANNEL_ID, full_message, DISCORD_BOT_TOKEN)
         return {
             "statusCode": 200,
             "body": json.dumps({"message": message})
