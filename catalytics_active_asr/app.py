@@ -573,7 +573,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: DAO Alliance with Huma Finance",
                     "startDate": 1747582140,
                     "endDate": 1747927740,
-                    "totalVotes": 0,
+                    "totalVotes": 551496572,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -600,7 +600,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: DAO Alliance with Huma Finance",
                     "startDate": 1747582140,
                     "endDate": 1747927740,
-                    "totalVotes": 0,
+                    "totalVotes": 551496572,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -808,7 +808,8 @@ def lambda_handler(event, context):
                             "value": 50000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
-                                "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo": 1
+                                "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo": 1,
+                                "5pqnjg1wJ6HmGdbUJPXfA8SRVAQBaG3b6Bz9PVNTMU9H": 1
                             },
                         },
                     ]
