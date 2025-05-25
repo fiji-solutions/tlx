@@ -593,33 +593,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "5",
-                    "proposalId": "5pqnjg1wJ6HmGdbUJPXfA8SRVAQBaG3b6Bz9PVNTMU9H",
-                    "proposalName": "Proposal: DAO Alliance with Huma Finance",
-                    "startDate": 1747582140,
-                    "endDate": 1747927740,
-                    "totalVotes": 551496572,
-                    "proposalChoices": [
-                        {
-                            "side": 2,
-                            "name": "I vote for this proposal.",
-                            "title": "For"
-                        },
-                        {
-                            "side": 1,
-                            "name": "I vote against this proposal.",
-                            "title": "Against"
-                        },
-                        {
-                            "side": 0,
-                            "name": "I abstain from this proposal.",
-                            "title": "Abstain"
-                        },
-                    ]
-                }
-            ],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
