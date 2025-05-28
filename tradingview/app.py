@@ -12,6 +12,7 @@ ALERT_USER_TAGS = {
     "4": "<@217278463889899522> <@363658083211149313>",
     "5": "<@217278463889899522> <@363658083211149313>",
     "6": "<@217278463889899522> <@363658083211149313>",
+    "7": "<@217278463889899522> <@363658083211149313>",
 }
 
 ALERT_TITLES = {
@@ -21,6 +22,7 @@ ALERT_TITLES = {
     "4": "🪙 Trend Titan Neutronstar BTC",
     "5": "💠 Trend Titan Neutronstar ETH",
     "6": "🟣 Trend Titan Neutronstar SOL",
+    "7": "💰 Bullrun Profit Maximizert (BTC/SOL/SUI)",
 }
 
 
