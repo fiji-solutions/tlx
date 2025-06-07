@@ -598,7 +598,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: JUP & Juice Working Group Budget",
                     "startDate": 1748881800,
                     "endDate": 1749227400,
-                    "totalVotes": 0,
+                    "totalVotes": 549708974,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -625,7 +625,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: JUP & Juice Working Group Budget",
                     "startDate": 1748881800,
                     "endDate": 1749227400,
-                    "totalVotes": 0,
+                    "totalVotes": 549708974,
                     "proposalChoices": [
                         {
                             "side": 2,
@@ -833,7 +833,8 @@ def lambda_handler(event, context):
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
                                 "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo": 1,
-                                "5pqnjg1wJ6HmGdbUJPXfA8SRVAQBaG3b6Bz9PVNTMU9H": 1
+                                "5pqnjg1wJ6HmGdbUJPXfA8SRVAQBaG3b6Bz9PVNTMU9H": 1,
+                                "2F2Gb7FWDEDmDyZhqm9QrKFE2PKFmteXXDDL9FKKsLwf": 1
                             },
                         },
                     ]
