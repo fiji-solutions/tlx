@@ -618,32 +618,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "5",
-                    "proposalId": "2F2Gb7FWDEDmDyZhqm9QrKFE2PKFmteXXDDL9FKKsLwf",
-                    "proposalName": "Proposal: JUP & Juice Working Group Budget",
-                    "startDate": 1748881800,
-                    "endDate": 1749227400,
-                    "totalVotes": 549708974,
-                    "proposalChoices": [
-                        {
-                            "side": 2,
-                            "name": "I vote for this proposal.",
-                            "title": "For"
-                        },
-                        {
-                            "side": 1,
-                            "name": "I vote against this proposal.",
-                            "title": "Against"
-                        },
-                        {
-                            "side": 0,
-                            "name": "I abstain from this proposal.",
-                            "title": "Abstain"
-                        },
-                    ]
-                }],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
