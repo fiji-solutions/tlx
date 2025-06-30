@@ -1,11 +1,15 @@
 import json
 import requests
+import urllib.parse
 
 # Constants
 DISCORD_BOT_TOKEN = ""
 CHANNEL_ID = ""
-SALESFORCE_TOKEN = ""
 USER_TO_PING = "<@217278463889899522>"
+
+SALESFORCE_CLIENT_ID = ""
+SALESFORCE_CLIENT_SECRET = ""
+SALESFORCE_INSTANCE = "https://cmoutafidis-test-dev-ed.my.salesforce.com"
 
 
 def send_discord_message(channel_id, message, token):
@@ -23,16 +27,39 @@ def send_discord_message(channel_id, message, token):
     return response
 
 
-def create_salesforce_lead(name, email, company, description):
-    """Create a lead in Salesforce using the Salesforce API."""
-    # This would typically connect to Salesforce REST API
-    # For production, you would need to implement Salesforce OAuth and API calls
-    # Example placeholder for now:
+def get_salesforce_token():
+    """Get Salesforce access token using Client Credentials flow."""
+    token_url = f"{SALESFORCE_INSTANCE}/services/oauth2/token"
 
-    salesforce_url = "https://cmoutafidis-test-dev-ed.my.salesforce.com/services/data/v57.0/sobjects/Lead"
+    data = {
+        "grant_type": "client_credentials",
+        "client_id": SALESFORCE_CLIENT_ID,
+        "client_secret": SALESFORCE_CLIENT_SECRET
+    }
 
     headers = {
-        "Authorization": f"Bearer {SALESFORCE_TOKEN}",
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post(
+        token_url,
+        data=urllib.parse.urlencode(data),
+        headers=headers
+    )
+    response.raise_for_status()
+    return response.json()["access_token"]
+
+
+def create_salesforce_lead(name, email, company, description):
+    """Create a lead in Salesforce using the Salesforce API."""
+    # Get access token
+    access_token = get_salesforce_token()
+
+    # API endpoint for creating a lead
+    salesforce_url = f"{SALESFORCE_INSTANCE}/services/data/v64.0/sobjects/Lead"
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json"
     }
 
@@ -49,6 +76,10 @@ def create_salesforce_lead(name, email, company, description):
         return response.json()
     except Exception as e:
         print(f"Error creating Salesforce lead: {str(e)}")
+        # Print more details for debugging
+        if hasattr(e, 'response') and e.response:
+            print(f"Response status: {e.response.status_code}")
+            print(f"Response body: {e.response.text}")
         raise e
 
 
@@ -87,7 +118,7 @@ def lambda_handler(event, context):
             }
 
         # Create Discord message
-        discord_message = f"{USER_TO_PING} New Personal Brand Form Submission:\n\n" \
+        discord_message = f"{USER_TO_PING} New Form Submission:\n\n" \
                           f"**Name:** {name}\n" \
                           f"**Email:** {email}\n" \
                           f"**Company:** {company}\n" \
@@ -118,7 +149,9 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
+        error_message = str(e)
+        print(f"Error processing form submission: {error_message}")
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": f"Error processing submission: {str(e)}"})
+            "body": json.dumps({"error": f"Error processing submission: {error_message}"})
         }
