@@ -292,6 +292,23 @@ Resources:
             Path: /tradingview/trigger
             Method: post
 
+  PersonalBrandFormFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: personal_brand_form/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 120
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HelloWorldApi
+            Path: /personal-brand/form
+            Method: post
+
   # ----COGNITO START----
   UserPool:
     Type: AWS::Cognito::UserPool
