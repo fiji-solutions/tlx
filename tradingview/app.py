@@ -15,18 +15,22 @@ ALERT_USER_TAGS = {
     "7": "<@217278463889899522> <@363658083211149313>",
     "8": "<@217278463889899522> <@363658083211149313>",
     "9": "<@217278463889899522> <@363658083211149313>",
+    "10": "<@217278463889899522> <@363658083211149313>",
+    "11": "<@217278463889899522> <@363658083211149313>",
 }
 
 ALERT_TITLES = {
-    "1": "🚨 Bullrun Profit Maximizert (Default)",
-    "2": "📈 Bullrun Profit Maximizert (BTC/ETH/SOL/SUI)",
-    "3": "⚠️ AI x Meme Impulse Tracker ETH",
-    "4": "🪙 Trend Titan Neutronstar BTC",
-    "5": "💠 Trend Titan Neutronstar ETH",
-    "6": "🟣 Trend Titan Neutronstar SOL",
-    "7": "💰 Bullrun Profit Maximizert (BTC/SOL/SUI)",
-    "8": "🏛️ Bullrun Profit Maximizert (BTC/ETH/SOL)",
-    "9": "⚠️ AI x Meme Impulse Tracker SOL",
+    "1":  "🚨 Bullrun Profit Maximizert (Default)",
+    "2":  "📈 Bullrun Profit Maximizert (BTC/ETH/SOL/SUI)",
+    "3":  "⚠️ AI x Meme Impulse Tracker ETH",
+    "4":  "🪙 Trend Titan Neutronstar BTC",
+    "5":  "💠 Trend Titan Neutronstar ETH",
+    "6":  "🟣 Trend Titan Neutronstar SOL",
+    "7":  "💰 Bullrun Profit Maximizert (BTC/SOL/SUI)",
+    "8":  "🏛️ Bullrun Profit Maximizert (BTC/ETH/SOL)",
+    "9":  "⚠️ AI x Meme Impulse Tracker SOL",
+    "10": "🛡 Bear Market Defender (15% Risk)",
+    "11": "🐻 Bear Market Defender (45% Risk)",
 }
 
 
