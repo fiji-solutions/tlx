@@ -4,6 +4,8 @@ import base64
 
 DISCORD_BOT_TOKEN = ""
 CHANNEL_ID = ""
+CHANNEL_ID_2 = ""
+CHANNEL_ID_3 = ""
 
 ALERT_USER_TAGS = {
     "1": "<@217278463889899522> <@363658083211149313>",
@@ -17,6 +19,7 @@ ALERT_USER_TAGS = {
     "9": "<@217278463889899522> <@363658083211149313>",
     "10": "<@217278463889899522> <@363658083211149313>",
     "11": "<@217278463889899522> <@363658083211149313>",
+    "12": "<@217278463889899522> <@363658083211149313>",
 }
 
 ALERT_TITLES = {
@@ -31,6 +34,22 @@ ALERT_TITLES = {
     "9":  "⚠️ AI x Meme Impulse Tracker SOL",
     "10": "🛡 Bear Market Defender (15% Risk)",
     "11": "🐻 Bear Market Defender (45% Risk)",
+    "12":  "⚫ Trend Titan Neutronstar XRP",
+}
+
+ALERT_CHANNELS = {
+    "1":  [CHANNEL_ID, CHANNEL_ID_2],
+    "2":  [CHANNEL_ID],
+    "3":  [CHANNEL_ID],
+    "4":  [CHANNEL_ID],
+    "5":  [CHANNEL_ID],
+    "6":  [CHANNEL_ID],
+    "7":  [CHANNEL_ID],
+    "8":  [CHANNEL_ID],
+    "9":  [CHANNEL_ID],
+    "10": [CHANNEL_ID],
+    "11": [CHANNEL_ID],
+    "12": [CHANNEL_ID_3],
 }
 
 
@@ -74,7 +93,11 @@ def lambda_handler(event, context):
         user_tags = ALERT_USER_TAGS.get(alert_id, "")
         full_message = f"{title}\n\n{message}\n\n{user_tags}"
 
-        send_discord_message(CHANNEL_ID, full_message, DISCORD_BOT_TOKEN)
+        channels = ALERT_CHANNELS.get(alert_id, [CHANNEL_ID])
+
+        for channel in channels:
+            send_discord_message(channel, full_message, DISCORD_BOT_TOKEN)
+
         return {
             "statusCode": 200,
             "body": json.dumps({"message": message})
