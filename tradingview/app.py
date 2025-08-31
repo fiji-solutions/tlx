@@ -3,6 +3,7 @@ import requests
 import base64
 
 DISCORD_BOT_TOKEN = ""
+DISCORD_BOT_TOKEN2 = ""
 CHANNEL_ID = ""
 CHANNEL_ID_2 = ""
 CHANNEL_ID_3 = ""
@@ -52,6 +53,21 @@ ALERT_CHANNELS = {
     "12": [CHANNEL_ID_3],
 }
 
+ALERT_BOT_TOKENS = {
+    "1":  DISCORD_BOT_TOKEN,
+    "2":  DISCORD_BOT_TOKEN,
+    "3":  DISCORD_BOT_TOKEN,
+    "4":  DISCORD_BOT_TOKEN,
+    "5":  DISCORD_BOT_TOKEN,
+    "6":  DISCORD_BOT_TOKEN,
+    "7":  DISCORD_BOT_TOKEN,
+    "8":  DISCORD_BOT_TOKEN,
+    "9":  DISCORD_BOT_TOKEN,
+    "10": DISCORD_BOT_TOKEN,
+    "11": DISCORD_BOT_TOKEN,
+    "12": DISCORD_BOT_TOKEN2,
+}
+
 
 def send_discord_message(channel_id, message, token):
     url = f"https://discord.com/api/v10/channels/{channel_id}/messages"
@@ -94,9 +110,10 @@ def lambda_handler(event, context):
         full_message = f"{title}\n\n{message}\n\n{user_tags}"
 
         channels = ALERT_CHANNELS.get(alert_id, [CHANNEL_ID])
+        bot_token = ALERT_BOT_TOKENS.get(alert_id, DISCORD_BOT_TOKEN)
 
         for channel in channels:
-            send_discord_message(channel, full_message, DISCORD_BOT_TOKEN)
+            send_discord_message(channel, full_message, bot_token)
 
         return {
             "statusCode": 200,
