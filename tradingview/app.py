@@ -21,6 +21,7 @@ ALERT_USER_TAGS = {
     "10": "<@217278463889899522> <@363658083211149313>",
     "11": "<@217278463889899522> <@363658083211149313>",
     "12": "<@217278463889899522> <@805079390513528854> <@163359156521271297>",
+    "13": "<@217278463889899522>",
 }
 
 ALERT_TITLES = {
@@ -36,6 +37,7 @@ ALERT_TITLES = {
     "10": "🛡 Bear Market Defender (15% Risk)",
     "11": "🐻 Bear Market Defender (45% Risk)",
     "12":  "⚫ Trend Titan Neutronstar XRP",
+    "13":  "🔵 Pendulum Trend XRP",
 }
 
 ALERT_CHANNELS = {
@@ -51,6 +53,7 @@ ALERT_CHANNELS = {
     "10": [CHANNEL_ID],
     "11": [CHANNEL_ID],
     "12": [CHANNEL_ID_3],
+    "13": [CHANNEL_ID_3],
 }
 
 ALERT_BOT_TOKENS = {
@@ -66,6 +69,7 @@ ALERT_BOT_TOKENS = {
     "10": DISCORD_BOT_TOKEN,
     "11": DISCORD_BOT_TOKEN,
     "12": DISCORD_BOT_TOKEN2,
+    "13": DISCORD_BOT_TOKEN2,
 }
 
 
