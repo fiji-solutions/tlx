@@ -616,9 +616,49 @@ def lambda_handler(event, context):
                             "title": "Abstain"
                         },
                     ]
+                },
+                {
+                    "asrId": "7",
+                    "proposalId": "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99",
+                    "proposalName": "Proposal: Burning the Litterbox",
+                    "startDate": 1761841740,
+                    "endDate": 1762273740,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 1,
+                            "name": "Burn the $Jup in the Litterbox",
+                            "title": "For"
+                        },
+                        {
+                            "side": 2,
+                            "name": "Don't burn the $Jup in the Litterbox",
+                            "title": "Against"
+                        }
+                    ]
                 }
             ],
-            "activeProposal": [],
+            "activeProposal": [
+                {
+                    "asrId": "7",
+                    "proposalId": "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99",
+                    "proposalName": "Proposal: Burning the Litterbox",
+                    "startDate": 1761841740,
+                    "endDate": 1762273740,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 1,
+                            "name": "Burn the $Jup in the Litterbox",
+                            "title": "For"
+                        },
+                        {
+                            "side": 2,
+                            "name": "Don't burn the $Jup in the Litterbox",
+                            "title": "Against"
+                        }
+                    ]
+                }],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
@@ -810,6 +850,22 @@ def lambda_handler(event, context):
                                 "6UeFzq4YrZCAvj3rAuHU33JaqBGaZHTSUH3tAYiaxGEo": 1,
                                 "5pqnjg1wJ6HmGdbUJPXfA8SRVAQBaG3b6Bz9PVNTMU9H": 1,
                                 "2F2Gb7FWDEDmDyZhqm9QrKFE2PKFmteXXDDL9FKKsLwf": 1
+                            },
+                        },
+                    ]
+                }
+            }, {
+                "id": "7",
+                "period": "October - December 2025",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUP",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                            "logic": {
+                                "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99": 1
                             },
                         },
                     ]
