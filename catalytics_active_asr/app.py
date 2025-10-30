@@ -621,8 +621,8 @@ def lambda_handler(event, context):
                     "asrId": "7",
                     "proposalId": "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99",
                     "proposalName": "Proposal: Burning the Litterbox",
-                    "startDate": 1761841740,
-                    "endDate": 1762273740,
+                    "startDate": 1761838140,
+                    "endDate": 1762270140,
                     "totalVotes": 0,
                     "proposalChoices": [
                         {
@@ -643,8 +643,8 @@ def lambda_handler(event, context):
                     "asrId": "7",
                     "proposalId": "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99",
                     "proposalName": "Proposal: Burning the Litterbox",
-                    "startDate": 1761841740,
-                    "endDate": 1762273740,
+                    "startDate": 1761838140,
+                    "endDate": 1762270140,
                     "totalVotes": 0,
                     "proposalChoices": [
                         {
