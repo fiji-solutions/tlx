@@ -623,7 +623,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: Burning the Litterbox",
                     "startDate": 1761838140,
                     "endDate": 1762270140,
-                    "totalVotes": 0,
+                    "totalVotes": 487580808,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -638,27 +638,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "7",
-                    "proposalId": "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99",
-                    "proposalName": "Proposal: Burning the Litterbox",
-                    "startDate": 1761838140,
-                    "endDate": 1762270140,
-                    "totalVotes": 0,
-                    "proposalChoices": [
-                        {
-                            "side": 1,
-                            "name": "Burn the $Jup in the Litterbox",
-                            "title": "For"
-                        },
-                        {
-                            "side": 2,
-                            "name": "Don't burn the $Jup in the Litterbox",
-                            "title": "Against"
-                        }
-                    ]
-                }],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
@@ -854,22 +834,6 @@ def lambda_handler(event, context):
                         },
                     ]
                 }
-            }, {
-                "id": "7",
-                "period": "October - December 2025",
-                "rewards": {
-                    "totalAsrRewards": [
-                        {
-                            "name": "Staked Jupiter",
-                            "symbol": "JUP",
-                            "value": 50000000,
-                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
-                            "logic": {
-                                "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99": 1
-                            },
-                        },
-                    ]
-                }
             }],
             "manualAsrs": [{
                 "id": "6",
@@ -881,6 +845,22 @@ def lambda_handler(event, context):
                             "symbol": "JUP",
                             "value": 50000000,
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp"
+                        },
+                    ]
+                }
+            }, {
+                "id": "7",
+                "period": "October - December 2025",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUP",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                            "logic": {
+                                "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99": 0
+                            },
                         },
                     ]
                 }
