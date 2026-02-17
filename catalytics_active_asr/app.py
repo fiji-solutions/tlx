@@ -648,12 +648,12 @@ def lambda_handler(event, context):
                         {
                             "side": 2,
                             "name": "Net-Zero Emissions",
-                            "title": "For"
+                            "title": "Option 1"
                         },
                         {
                             "side": 1,
                             "name": "Proceed with Jupuary as Planned",
-                            "title": "Against"
+                            "title": "Option 2"
                         }
                     ]
                 }
@@ -670,12 +670,12 @@ def lambda_handler(event, context):
                         {
                             "side": 2,
                             "name": "Net-Zero Emissions",
-                            "title": "For"
+                            "title": "Option 1"
                         },
                         {
                             "side": 1,
                             "name": "Proceed with Jupuary as Planned",
-                            "title": "Against"
+                            "title": "Option 2"
                         }
                     ]
                 }],
