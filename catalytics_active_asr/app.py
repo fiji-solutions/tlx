@@ -636,9 +636,49 @@ def lambda_handler(event, context):
                             "title": "Against"
                         }
                     ]
+                },
+                {
+                    "asrId": "8",
+                    "proposalId": "C5XRDvjHZXmMs45WhjzEKdg2dcSg2aCSwEvPvivWpBF6",
+                    "proposalName": "Proposal: Net-Zero Emissions",
+                    "startDate": 1771325940,
+                    "endDate": 1771757940,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 2,
+                            "name": "Net-Zero Emissions",
+                            "title": "For"
+                        },
+                        {
+                            "side": 1,
+                            "name": "Proceed with Jupuary as Planned",
+                            "title": "Against"
+                        }
+                    ]
                 }
             ],
-            "activeProposal": [],
+            "activeProposal": [
+                {
+                    "asrId": "8",
+                    "proposalId": "C5XRDvjHZXmMs45WhjzEKdg2dcSg2aCSwEvPvivWpBF6",
+                    "proposalName": "Proposal: Net-Zero Emissions",
+                    "startDate": 1771325940,
+                    "endDate": 1771757940,
+                    "totalVotes": 0,
+                    "proposalChoices": [
+                        {
+                            "side": 2,
+                            "name": "Net-Zero Emissions",
+                            "title": "For"
+                        },
+                        {
+                            "side": 1,
+                            "name": "Proceed with Jupuary as Planned",
+                            "title": "Against"
+                        }
+                    ]
+                }],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
@@ -860,6 +900,22 @@ def lambda_handler(event, context):
                             "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
                             "logic": {
                                 "HpYmjb9VWSZUYsWbZMJg2UshbQA8E5xwEzeGyRKSBa99": 0
+                            },
+                        },
+                    ]
+                }
+            }, {
+                "id": "8",
+                "period": "January - March 2025",
+                "rewards": {
+                    "totalAsrRewards": [
+                        {
+                            "name": "Staked Jupiter",
+                            "symbol": "JUP",
+                            "value": 50000000,
+                            "logoUrl": "https://d2l35o8v06vi7z.cloudfront.net/JUP.webp",
+                            "logic": {
+                                "C5XRDvjHZXmMs45WhjzEKdg2dcSg2aCSwEvPvivWpBF6": 0
                             },
                         },
                     ]
