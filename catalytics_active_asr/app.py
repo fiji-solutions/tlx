@@ -646,13 +646,13 @@ def lambda_handler(event, context):
                     "totalVotes": 0,
                     "proposalChoices": [
                         {
-                            "side": 2,
-                            "name": "Net-Zero Emissions",
+                            "side": 1,
+                            "name": "Proceed with Jupuary as Planned",
                             "title": "Option 1"
                         },
                         {
-                            "side": 1,
-                            "name": "Proceed with Jupuary as Planned",
+                            "side": 2,
+                            "name": "Net-Zero Emissions",
                             "title": "Option 2"
                         }
                     ]
@@ -668,13 +668,13 @@ def lambda_handler(event, context):
                     "totalVotes": 0,
                     "proposalChoices": [
                         {
-                            "side": 2,
-                            "name": "Net-Zero Emissions",
+                            "side": 1,
+                            "name": "Proceed with Jupuary as Planned",
                             "title": "Option 1"
                         },
                         {
-                            "side": 1,
-                            "name": "Proceed with Jupuary as Planned",
+                            "side": 2,
+                            "name": "Net-Zero Emissions",
                             "title": "Option 2"
                         }
                     ]
