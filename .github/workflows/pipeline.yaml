@@ -66,8 +66,21 @@ jobs:
         env:
           FEATURE_BRANCH_NAME: ${{ github.event.ref }}
         run: |
+          # A feature stack is ALWAYS prefixed, so a branch name can never resolve to a real
+          # stack. Without this, branch `feature/tlx-production` yielded exactly `tlx-production`
+          # -- the live production stack -- because ${VAR##*/} strips to the last path segment.
+          STACK="tlx-feat-$(echo ${FEATURE_BRANCH_NAME##*/} | tr -cd '[a-zA-Z0-9-]')"
+          # Belt and braces: refuse a reserved name outright, so removing the prefix above cannot
+          # silently re-open the hole.
+          case "$STACK" in
+            tlx-feat- | "$TESTING_STACK_NAME" | "$PROD_STACK_NAME" | tlx-production | tlx-staging)
+              echo "::error::refusing to delete reserved or empty stack name '$STACK'"
+              exit 1
+              ;;
+          esac
+          echo "deleting feature stack: $STACK"
           sam delete \
-            --stack-name $(echo ${FEATURE_BRANCH_NAME##*/} | tr -cd '[a-zA-Z0-9-]') \
+            --stack-name "$STACK" \
             --region ${TESTING_REGION} \
             --no-prompts
 
@@ -101,7 +114,18 @@ jobs:
       - name: Deploy to feature stack in the testing account
         shell: bash
         run: |
-          sam deploy --stack-name $(echo ${GITHUB_REF##*/} | tr -cd '[a-zA-Z0-9-]') \
+          # Same guard as delete-feature. A PUSH is destructive too: this job passes --role-arn
+          # explicitly, so it does not meet the PassRole obstacle the delete path may hit, which
+          # makes it the MORE reachable of the two paths.
+          STACK="tlx-feat-$(echo ${GITHUB_REF##*/} | tr -cd '[a-zA-Z0-9-]')"
+          case "$STACK" in
+            tlx-feat- | "$TESTING_STACK_NAME" | "$PROD_STACK_NAME" | tlx-production | tlx-staging)
+              echo "::error::refusing to deploy over reserved or empty stack name '$STACK'"
+              exit 1
+              ;;
+          esac
+          echo "deploying feature stack: $STACK"
+          sam deploy --stack-name "$STACK" \
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
