@@ -1,157 +1,116 @@
 import json
-import requests
-import urllib.parse
+import os
+import re
+from datetime import datetime, timezone
 
-# Constants
-DISCORD_BOT_TOKEN = ""
-CHANNEL_ID = ""
-USER_TO_PING = "<@217278463889899522>"
+import boto3
 
-SALESFORCE_CLIENT_ID = ""
-SALESFORCE_CLIENT_SECRET = ""
-SALESFORCE_INSTANCE = "https://cmoutafidis-test-dev-ed.my.salesforce.com"
+# Every contact form on fijisolutions.net and peakcodeconsulting.ch posts here.
+# A submission is emailed to LEAD_TO through Amazon SES, with Reply-To set to the lead.
+# Discord and Salesforce were dropped on 2026-10-08: the deployed copy had an empty
+# Discord channel and token (never committed, so every pipeline deploy blanked them) and
+# every submission returned 500.
+LEAD_TO = os.environ.get("LEAD_TO", "")
+LEAD_FROM = os.environ.get("LEAD_FROM", "")
 
+CORS_HEADERS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "*",
+    "Access-Control-Allow-Origin": "*",
+}
 
-def send_discord_message(channel_id, message, token):
-    """Send a message to a Discord channel using the Discord API."""
-    url = f"https://discord.com/api/v10/channels/{channel_id}/messages"
-    headers = {
-        "Authorization": f"Bot {token}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "content": message
-    }
-    response = requests.post(url, headers=headers, json=payload)
-    response.raise_for_status()
-    return response
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+_ses_client = None
 
 
-def get_salesforce_token():
-    """Get Salesforce access token using Client Credentials flow."""
-    token_url = f"{SALESFORCE_INSTANCE}/services/oauth2/token"
+def ses():
+    global _ses_client
+    if _ses_client is None:
+        _ses_client = boto3.client("ses")
+    return _ses_client
 
-    data = {
-        "grant_type": "client_credentials",
-        "client_id": SALESFORCE_CLIENT_ID,
-        "client_secret": SALESFORCE_CLIENT_SECRET
-    }
 
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+def respond(status, payload):
+    return {"statusCode": status, "headers": CORS_HEADERS, "body": json.dumps(payload)}
 
-    response = requests.post(
-        token_url,
-        data=urllib.parse.urlencode(data),
-        headers=headers
+
+def one_line(value, limit=200):
+    """Collapse a value to one line, so it is safe in an email header."""
+    return " ".join(str(value).split())[:limit]
+
+
+def site_of(event):
+    headers = {k.lower(): v for k, v in (event.get("headers") or {}).items()}
+    origin = headers.get("origin") or headers.get("referer") or ""
+    if "peakcodeconsulting" in origin:
+        return "Peak Code"
+    if "fijisolutions" in origin:
+        return "Fiji"
+    return one_line(origin, 80) or "unknown site"
+
+
+def build_email(name, email, company, question, message, site, received_at):
+    subject = one_line(f"New lead ({site}): {name}" + (f", {company}" if company else ""))
+    body = (
+        f"New form submission from {site}, {received_at}\n\n"
+        f"Name: {name}\n"
+        f"Email: {email}\n"
+        f"Company: {company}\n"
+        f"Question: {question}\n\n"
+        f"Message:\n{message}\n\n"
+        "Reply to this email to answer the lead directly.\n"
     )
-    response.raise_for_status()
-    return response.json()["access_token"]
-
-
-def create_salesforce_lead(name, email, company, description):
-    """Create a lead in Salesforce using the Salesforce API."""
-    # Get access token
-    access_token = get_salesforce_token()
-
-    # API endpoint for creating a lead
-    salesforce_url = f"{SALESFORCE_INSTANCE}/services/data/v64.0/sobjects/Lead"
-
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json"
-    }
-
-    payload = {
-        "LastName": name,
-        "Email": email,
-        "Company": company,
-        "Description": description
-    }
-
-    try:
-        response = requests.post(salesforce_url, headers=headers, json=payload)
-        response.raise_for_status()
-        return response.json()
-    except Exception as e:
-        print(f"Error creating Salesforce lead: {str(e)}")
-        # Print more details for debugging
-        if hasattr(e, 'response') and e.response:
-            print(f"Response status: {e.response.status_code}")
-            print(f"Response body: {e.response.text}")
-        raise e
+    return subject, body
 
 
 def lambda_handler(event, context):
     """
-    Lambda handler for processing personal brand form submissions.
-
-    Expected event body:
-    {
-        "name": "John Doe",
-        "email": "johndoe@example.com",
-        "company": "Example Inc",
-        "question": "What services do you offer?",
-        "message": "I'm interested in your consulting services."
-    }
+    Expected body: {"name", "email", "company", "question", "message"}; name and email required.
+    200 once SES accepts the email, 400 on missing fields, 500 when the email fails
+    (the forms then show the fallback that asks the visitor to email us).
     """
     try:
-        # Parse request body
-        if isinstance(event.get('body'), str):
-            body = json.loads(event.get('body', '{}'))
-        else:
-            body = event.get('body', {})
+        raw = event.get("body") or "{}"
+        body = json.loads(raw) if isinstance(raw, str) else raw
+        if not isinstance(body, dict):
+            body = {}
+    except ValueError:
+        return respond(400, {"error": "Body must be JSON."})
 
-        # Extract form data
-        name = body.get('name', '')
-        email = body.get('email', '')
-        company = body.get('company', '')
-        question = body.get('question', '')
-        message = body.get('message', '')
+    name = str(body.get("name", "")).strip()
+    email = str(body.get("email", "")).strip()
+    company = str(body.get("company", "")).strip()
+    question = str(body.get("question", "")).strip()
+    message = str(body.get("message", "")).strip()
 
-        # Validate required fields
-        if not all([name, email]):
-            return {
-                "statusCode": 400,
-                "body": json.dumps({"error": "Name and email are required fields."})
-            }
+    if not all([name, email]):
+        return respond(400, {"error": "Name and email are required fields."})
 
-        # Create Discord message
-        discord_message = f"{USER_TO_PING} New Form Submission:\n\n" \
-                          f"**Name:** {name}\n" \
-                          f"**Email:** {email}\n" \
-                          f"**Company:** {company}\n" \
-                          f"**Question:** {question}\n" \
-                          f"**Message:** {message}"
+    site = site_of(event)
+    received_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-        # Send Discord notification
-        send_discord_message(CHANNEL_ID, discord_message, DISCORD_BOT_TOKEN)
+    # Logged before sending, so a failed email still leaves the lead in CloudWatch.
+    print(json.dumps({"lead": {"site": site, "name": name, "email": email, "company": company,
+                               "question": question, "message": message, "at": received_at}}))
 
-        # Create combined description for Salesforce
-        salesforce_description = f"Question: {question}\n\nMessage: {message}"
+    subject, text = build_email(name, email, company, question, message, site, received_at)
+    send_args = {
+        "Source": f"Website forms <{LEAD_FROM}>",
+        "Destination": {"ToAddresses": [LEAD_TO]},
+        "Message": {
+            "Subject": {"Data": subject, "Charset": "UTF-8"},
+            "Body": {"Text": {"Data": text, "Charset": "UTF-8"}},
+        },
+    }
+    if EMAIL_RE.match(email):
+        send_args["ReplyToAddresses"] = [email]
 
-        # Create Salesforce lead
-        salesforce_response = create_salesforce_lead(name, email, company, salesforce_description)
-
-        # Return success response
-        return {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "*",
-                "Access-Control-Allow-Origin": "*",
-            },
-            "body": json.dumps({
-                "message": "Form submission processed successfully"
-            })
-        }
-
+    try:
+        ses().send_email(**send_args)
     except Exception as e:
-        error_message = str(e)
-        print(f"Error processing form submission: {error_message}")
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"error": f"Error processing submission: {error_message}"})
-        }
+        print(f"Error sending lead email: {e}")
+        return respond(500, {"error": "Could not process the submission."})
+
+    return respond(200, {"message": "Form submission processed successfully"})

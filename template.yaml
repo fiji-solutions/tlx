@@ -297,8 +297,18 @@ Resources:
     Properties:
       CodeUri: personal_brand_form/
       Handler: app.lambda_handler
-      Runtime: python3.9
-      Timeout: 120
+      Runtime: python3.12
+      Timeout: 30
+      Environment:
+        Variables:
+          LEAD_TO: info@fijisolutions.net
+          LEAD_FROM: info@fijisolutions.net
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ses:SendEmail
+              Resource: '*'
       Architectures:
         - x86_64
       Events:
