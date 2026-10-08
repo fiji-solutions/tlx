@@ -83,3 +83,35 @@ def test_ses_failure_is_500(monkeypatch):
     monkeypatch.setattr(app, "ses", lambda: FakeSes(fail=True))
     res = app.lambda_handler(event(FULL), None)
     assert res["statusCode"] == 500
+
+
+def test_filled_honeypot_is_dropped_with_200(fake_ses):
+    res = app.lambda_handler(event(dict(FULL, website="http://spam.example")), None)
+    assert res["statusCode"] == 200
+    assert fake_ses.sent == []
+
+
+def test_too_fast_submit_is_dropped(fake_ses):
+    res = app.lambda_handler(event(dict(FULL, elapsed_ms=900)), None)
+    assert res["statusCode"] == 200
+    assert fake_ses.sent == []
+
+
+def test_normal_submit_with_new_fields_is_emailed(fake_ses):
+    res = app.lambda_handler(event(dict(FULL, website="", elapsed_ms=45000)), None)
+    assert res["statusCode"] == 200
+    assert len(fake_ses.sent) == 1
+    assert not fake_ses.sent[0]["Message"]["Subject"]["Data"].startswith("[Likely spam]")
+
+
+def test_random_strings_are_flagged_but_still_emailed(fake_ses):
+    junk = dict(FULL, name="hJAJvTXFbfVWByJZwvd", company="dCYilTntLxKKtvDSEwniRgn", message="qWeRtYuIoPaSdFgH")
+    res = app.lambda_handler(event(junk), None)
+    assert res["statusCode"] == 200
+    assert fake_ses.sent[0]["Message"]["Subject"]["Data"].startswith("[Likely spam]")
+
+
+def test_real_names_are_not_flagged(fake_ses):
+    real = dict(FULL, name="Charalampos Moutafidis", company="ThyssenKrupp McDonald LinkedIn", message="We use camundaProcessEngine in production")
+    app.lambda_handler(event(real), None)
+    assert not fake_ses.sent[0]["Message"]["Subject"]["Data"].startswith("[Likely spam]")

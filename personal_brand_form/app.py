@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import re
 from datetime import datetime, timezone
@@ -21,6 +22,57 @@ CORS_HEADERS = {
 }
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+# Spam screening, added 2026-10-08 after bot submissions with random strings in every field
+# ("hJAJvTXFbfVWByJZwvd", "dCYilTntLxKKtvDSEwniRgn").
+#
+# Dropped: the visitor gets the same 200 a real lead gets, so a bot learns nothing, no email is
+# sent, and the submission is logged in full under "spam" so a false positive can be recovered.
+# 1. Honeypot: the forms send "website", the value of an input people never see. Text in it is
+#    a bot filling every input it finds.
+# 2. Speed: the forms send "elapsed_ms", the time between the form appearing and the submit.
+#    Under MIN_ELAPSED_MS is not a person typing. A missing value is let through, so a page
+#    cached from before this change still works.
+#
+# Flagged, not dropped: the email is sent with "[Likely spam]" in the subject, because this check
+# can be wrong about a real person and a dropped lead is never seen again.
+# 3. Gibberish: a word of 8+ letters that switches from lower to upper case 3+ times inside
+#    itself. Real names and company names top out at one or two (LinkedIn, McDonald, ThyssenKrupp);
+#    all-caps words, Greek or Latin, switch zero times. Code identifiers (camundaProcessEngine)
+#    can reach three, which is why a hit in one free-text field alone is not enough.
+MIN_ELAPSED_MS = int(os.environ.get("MIN_ELAPSED_MS", "3000"))
+MAX_FIELD_CHARS = 5000
+WORD_RE = re.compile(r"[^\W\d_]{8,}")
+
+
+def is_gibberish_word(word):
+    return sum(1 for a, b in zip(word, word[1:]) if a.islower() and b.isupper()) >= 3
+
+
+def has_gibberish(value):
+    return any(is_gibberish_word(w) for w in WORD_RE.findall(value))
+
+
+def drop_reason(body):
+    honeypot = body.get("website")
+    if isinstance(honeypot, str) and honeypot.strip():
+        return "honeypot"
+    elapsed = body.get("elapsed_ms")
+    if (isinstance(elapsed, (int, float)) and not isinstance(elapsed, bool)
+            and math.isfinite(elapsed) and 0 <= elapsed < MIN_ELAPSED_MS):
+        return f"too fast ({int(elapsed)} ms)"
+    return None
+
+
+def looks_like_spam(name, company, question, message):
+    if has_gibberish(name):
+        return True
+    # Some forms copy the question or the company into the message, so one word typed once
+    # would count twice. Each distinct value the visitor typed counts once.
+    for copied in (question, company):
+        if copied:
+            message = message.replace(copied, "")
+    return sum(1 for v in (company, question, message) if has_gibberish(v)) >= 2
 
 _ses_client = None
 
@@ -68,8 +120,9 @@ def build_email(name, email, company, question, message, site, received_at):
 def lambda_handler(event, context):
     """
     Expected body: {"name", "email", "company", "question", "message"}; name and email required.
-    200 once SES accepts the email, 400 on missing fields, 500 when the email fails
-    (the forms then show the fallback that asks the visitor to email us).
+    Optional: "website" (the honeypot, empty for a person) and "elapsed_ms" (see drop_reason).
+    200 once SES accepts the email, 200 with no email for dropped spam, 400 on missing fields,
+    500 when the email fails (the forms then show the fallback that asks the visitor to email us).
     """
     try:
         raw = event.get("body") or "{}"
@@ -79,11 +132,11 @@ def lambda_handler(event, context):
     except ValueError:
         return respond(400, {"error": "Body must be JSON."})
 
-    name = str(body.get("name", "")).strip()
-    email = str(body.get("email", "")).strip()
-    company = str(body.get("company", "")).strip()
-    question = str(body.get("question", "")).strip()
-    message = str(body.get("message", "")).strip()
+    name = str(body.get("name", "")).strip()[:MAX_FIELD_CHARS]
+    email = str(body.get("email", "")).strip()[:MAX_FIELD_CHARS]
+    company = str(body.get("company", "")).strip()[:MAX_FIELD_CHARS]
+    question = str(body.get("question", "")).strip()[:MAX_FIELD_CHARS]
+    message = str(body.get("message", "")).strip()[:MAX_FIELD_CHARS]
 
     if not all([name, email]):
         return respond(400, {"error": "Name and email are required fields."})
@@ -91,11 +144,28 @@ def lambda_handler(event, context):
     site = site_of(event)
     received_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
+    headers = {k.lower(): v for k, v in (event.get("headers") or {}).items()}
+    seen = {"ip": ((event.get("requestContext") or {}).get("identity") or {}).get("sourceIp"),
+            "ua": one_line(headers.get("user-agent", ""), 200),
+            "elapsed_ms": body.get("elapsed_ms"),
+            "website": one_line(body.get("website", ""), 100)}
+
+    reason = drop_reason(body)
+    if reason:
+        print(json.dumps({"spam": {"reason": reason, "site": site, "name": name, "email": email,
+                                   "company": company, "question": question, "message": message,
+                                   "at": received_at, **seen}}, ensure_ascii=False, default=str))
+        return respond(200, {"message": "Form submission processed successfully"})
+    likely_spam = looks_like_spam(name, company, question, message)
+
     # Logged before sending, so a failed email still leaves the lead in CloudWatch.
     print(json.dumps({"lead": {"site": site, "name": name, "email": email, "company": company,
-                               "question": question, "message": message, "at": received_at}}))
+                               "question": question, "message": message, "at": received_at,
+                               "likely_spam": likely_spam, **seen}}, ensure_ascii=False, default=str))
 
     subject, text = build_email(name, email, company, question, message, site, received_at)
+    if likely_spam:
+        subject = "[Likely spam] " + subject
     send_args = {
         "Source": f"Website forms <{LEAD_FROM}>",
         "Destination": {"ToAddresses": [LEAD_TO]},
