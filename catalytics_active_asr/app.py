@@ -643,7 +643,7 @@ def lambda_handler(event, context):
                     "proposalName": "Proposal: Net-Zero Emissions",
                     "startDate": 1771325940,
                     "endDate": 1771757940,
-                    "totalVotes": 0,
+                    "totalVotes": 480035391,
                     "proposalChoices": [
                         {
                             "side": 1,
@@ -658,27 +658,7 @@ def lambda_handler(event, context):
                     ]
                 }
             ],
-            "activeProposal": [
-                {
-                    "asrId": "8",
-                    "proposalId": "C5XRDvjHZXmMs45WhjzEKdg2dcSg2aCSwEvPvivWpBF6",
-                    "proposalName": "Proposal: Net-Zero Emissions",
-                    "startDate": 1771325940,
-                    "endDate": 1771757940,
-                    "totalVotes": 0,
-                    "proposalChoices": [
-                        {
-                            "side": 1,
-                            "name": "Proceed with Jupuary as Planned",
-                            "title": "Option 1"
-                        },
-                        {
-                            "side": 2,
-                            "name": "Net-Zero Emissions",
-                            "title": "Option 2"
-                        }
-                    ]
-                }],
+            "activeProposal": [],
             "asrs": [{
                 "id": "1",
                 "period": "March - June 2024",
