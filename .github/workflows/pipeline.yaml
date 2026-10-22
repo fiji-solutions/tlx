@@ -9,9 +9,13 @@ on:
     branches:
       - 'feature**'
 
+# GitHub's OIDC token is exchanged for the pipeline roles directly, so no AWS keys
+# are stored in the repo. The pipeline IAM user these secrets belonged to was deleted.
+permissions:
+  id-token: write
+  contents: read
+
 env:
-  PIPELINE_USER_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yaml
   TESTING_STACK_NAME: tlx-staging
   TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::276670305248:role/aws-sam-cli-managed-tlx-stagi-PipelineExecutionRole-n0eOhOn7RlVj
@@ -52,10 +56,8 @@ jobs:
           use-installer: true
 
       - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.TESTING_REGION }}
           role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
           role-session-name: testing-packaging
@@ -101,10 +103,8 @@ jobs:
       - run: sam build --template ${SAM_TEMPLATE} --use-container
 
       - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.TESTING_REGION }}
           role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
           role-session-name: feature-deployment
@@ -148,10 +148,8 @@ jobs:
         run: sam build --template ${SAM_TEMPLATE} --use-container
 
       - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.TESTING_REGION }}
           role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
           role-session-name: testing-packaging
@@ -171,10 +169,8 @@ jobs:
           path: packaged-testing.yaml
 
       - name: Assume the prod pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.PROD_REGION }}
           role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
           role-session-name: prod-packaging
@@ -208,10 +204,8 @@ jobs:
           name: packaged-testing.yaml
 
       - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.TESTING_REGION }}
           role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
           role-session-name: testing-deployment
@@ -256,10 +250,8 @@ jobs:
           name: packaged-prod.yaml
 
       - name: Assume the prod pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.PROD_REGION }}
           role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
           role-session-name: prod-deployment
